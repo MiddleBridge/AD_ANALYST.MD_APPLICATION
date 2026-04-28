@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Env / secrets
+.env
+credentials.json
+token.json
+
+# Local runtime artifacts
+pipeline.db
+logs/
+tmp/
+
+# Virtual environments
+venv/
+venv_old39/
+
+# OS/editor
+.DS_Store
