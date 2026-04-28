@@ -8,7 +8,7 @@ It demonstrates three concrete, high-value workflows:
 3. **Meeting notes** (one-shot call sync to company page + optional tasks DB)
 
 If you only read two files:
-- `INOVO_AI_opis_dzialania.txt` — concise 3-use-case narrative
+- `APPLICATION_USE_CASES.md` — concise 3-use-case narrative
 - `main.py` — executable entrypoint and CLI surface
 
 ## What is implemented
