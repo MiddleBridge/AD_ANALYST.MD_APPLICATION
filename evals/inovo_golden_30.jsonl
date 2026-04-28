@@ -1,0 +1,30 @@
+{"id":"case_01","geo_status":"confirmed_cee","stage":"seed","sector":"developer tools","interest":"HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}
+{"id":"case_02","geo_status":"confirmed_cee","stage":"pre-seed","sector":"b2b saas","interest":"MEDIUM_HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}
+{"id":"case_03","geo_status":"possible_cee_diaspora","stage":"seed","sector":"ai/ml","interest":"HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_04","geo_status":"no_cee_signal","stage":"seed","sector":"ai/ml","interest":"HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_05","geo_status":"confirmed_cee","stage":"series-a","sector":"data infrastructure","interest":"MEDIUM","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_06","geo_status":"confirmed_cee","stage":"series-b+","sector":"enterprise software","interest":"HIGH","expected_verdict":"REJECT_OR_ARCHIVE"}
+{"id":"case_07","geo_status":"confirmed_cee","stage":"seed","sector":"agency","interest":"MEDIUM","expected_verdict":"REJECT_OR_ARCHIVE"}
+{"id":"case_08","geo_status":"possible_cee","stage":"unknown","sector":"developer tools","interest":"MEDIUM_HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_09","geo_status":"confirmed_cee","stage":"pre-seed","sector":"healthcare software","interest":"MEDIUM","expected_verdict":"REQUEST_DECK"}
+{"id":"case_10","geo_status":"confirmed_cee","stage":"seed-extension","sector":"fintech infrastructure","interest":"HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}
+{"id":"case_11","geo_status":"unknown","stage":"seed","sector":"ai/ml","interest":"LOW","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_12","geo_status":"confirmed_cee","stage":"late-seed","sector":"b2b saas","interest":"MEDIUM","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_13","geo_status":"possible_cee_operations","stage":"seed","sector":"workflow automation","interest":"MEDIUM_HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_14","geo_status":"confirmed_cee","stage":"pre-seed","sector":"software infrastructure","interest":"LOW","expected_verdict":"REJECT_OR_ARCHIVE"}
+{"id":"case_15","geo_status":"confirmed_cee","stage":"seed","sector":"vertical ai","interest":"HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}
+{"id":"case_16","geo_status":"confirmed_cee","stage":"seed","sector":"crypto","interest":"HIGH","expected_verdict":"REJECT_OR_ARCHIVE"}
+{"id":"case_17","geo_status":"possible_cee_diaspora","stage":"pre-seed","sector":"developer tools","interest":"MEDIUM_HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_18","geo_status":"confirmed_cee","stage":"seed","sector":"enterprise software","interest":"MEDIUM_HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}
+{"id":"case_19","geo_status":"confirmed_cee","stage":"seed","sector":"consulting","interest":"LOW","expected_verdict":"REJECT_OR_ARCHIVE"}
+{"id":"case_20","geo_status":"possible_cee","stage":"series-a-ready","sector":"ai/ml","interest":"MEDIUM","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_21","geo_status":"confirmed_cee","stage":"unknown","sector":"b2b saas","interest":"MEDIUM_HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_22","geo_status":"confirmed_cee","stage":"seed","sector":"security software","interest":"MEDIUM_HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}
+{"id":"case_23","geo_status":"no_cee_signal","stage":"series-a","sector":"enterprise software","interest":"HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_24","geo_status":"possible_cee_diaspora","stage":"late-seed","sector":"developer tools","interest":"HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_25","geo_status":"confirmed_cee","stage":"seed","sector":"data infrastructure","interest":"MEDIUM","expected_verdict":"REQUEST_DECK"}
+{"id":"case_26","geo_status":"confirmed_cee","stage":"pre-seed","sector":"workflow automation","interest":"MEDIUM_HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}
+{"id":"case_27","geo_status":"unknown","stage":"unknown","sector":"unknown","interest":"LOW","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_28","geo_status":"confirmed_cee","stage":"series-b+","sector":"ai/ml","interest":"MEDIUM_HIGH","expected_verdict":"REJECT_OR_ARCHIVE"}
+{"id":"case_29","geo_status":"possible_cee","stage":"seed-extension","sector":"healthcare software","interest":"MEDIUM_HIGH","expected_verdict":"REQUEST_DECK_AND_VERIFY"}
+{"id":"case_30","geo_status":"confirmed_cee","stage":"seed","sector":"marketplace with software layer","interest":"HIGH","expected_verdict":"REVIEW_DECK_OR_TAKE_CALL"}

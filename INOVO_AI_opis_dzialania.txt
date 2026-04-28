@@ -96,47 +96,7 @@ Kluczowe moduły:
   main.py (--report), agents/reporter.py, storage/database.py
 
 
-4) USE CASE 4 — Integracja Fireflies -> Notion (nagranie per firma)
---------------------------------------------------------------------
-Status:
-  To jest docelowy use case do wdrożenia operacyjnego (integracja rozszerzająca).
-
-Cel:
-  Po callu z founderem automatycznie podpiąć transcript/nagranie z Fireflies do właściwej firmy w Notion.
-
-Wartość biznesowa:
-  Pełny kontekst dealu w jednym miejscu: inbound + screening + rozmowy founderskie.
-
-Skład use case:
-  A) Input:
-     - webhook/event z Fireflies (meeting_id, transcript_url, tytuł, uczestnicy, data),
-     - klucz mapowania do firmy (np. domena email / company name / message_id).
-  B) Processing:
-     - matching firmy do rekordu Notion (najpierw Message ID/domain, fallback po nazwie i dacie),
-     - walidacja jakości matchu (confidence),
-     - transformacja transcriptu do krótkiego call summary:
-       * highlights,
-       * open questions,
-       * next steps,
-       * risks.
-  C) Output:
-     - nowa sekcja na stronie firmy w Notion, np. "Founder Calls",
-     - link do nagrania Fireflies + timestamp + skrót notatek,
-     - aktualizacja pola "Last founder call".
-  D) Guardrails:
-     - brak auto-decyzji inwestycyjnych,
-     - ślad audytowy: source=fireflies, event_id, synced_at,
-     - retry + dead-letter dla nieudanych synców,
-     - ochrona danych wrażliwych i zakresów uprawnień API.
-
-Minimalny zakres MVP tej integracji:
-  1. webhook receiver dla Fireflies,
-  2. mapowanie do Notion page_id,
-  3. append call note na stronę firmy,
-  4. logowanie sukces/błąd + retry.
-
-
-5) Dlaczego ten zestaw use case'ów jest "high-value" dla roli Analyst (Sourcing & Ops)
+4) Dlaczego ten zestaw use case'ów jest "high-value" dla roli Analyst (Sourcing & Ops)
 ---------------------------------------------------------------------------------------
   • łączy sourcing + first screens + decision support + ops hygiene w jednym workflow,
   • wzmacnia "same-day loops" i ogranicza operacyjny chaos,
@@ -144,7 +104,7 @@ Minimalny zakres MVP tej integracji:
   • jest AI-native, ale z bezpieczną granicą człowieka na finalnej decyzji.
 
 
-6) Krótka mapa komend (dowód działania)
+5) Krótka mapa komend (dowód działania)
 ---------------------------------------
   python main.py --once
       Jednorazowy screening inboundu email/deck.
@@ -159,8 +119,8 @@ Minimalny zakres MVP tej integracji:
       Synchronizacja rekordów do Notion.
 
 
-7) Szczegóły operacyjne UC3 (Weekly report) — jak to czytać
-------------------------------------------------------------
+6) Szczegóły operacyjne UC3 (Weekly report) — jak to czytać
+-----------------------------------------------------------
 Poziom użyteczności:
   Tak, raport jest useful jako weekly heartbeat operacyjny.
   To nie jest jeszcze "partner memo", tylko narzędzie do zarządzania lejkiem.
@@ -201,6 +161,29 @@ Co podnosi wartość raportu do poziomu partner-grade (kolejny krok):
      - Follow-up owner + deadline.
   4. Delta week-over-week:
      - zmiana conversion i kosztu/deal.
+
+
+7) Szczegóły UC3 Meeting Notes (Fireflies/Calendly -> Notion)
+--------------------------------------------------------------
+Poziom użyteczności:
+  UC3 domyka pętlę po rozmowie z founderem: każda rozmowa jest dopinana do strony firmy.
+
+Co jest wdrożone:
+  - one-shot sync calla do Notion: `python main.py sync-call ...`
+  - sekcja `Founder Calls` na stronie firmy,
+  - deduplikacja po `call_id`,
+  - opcjonalne tworzenie tasków w osobnej bazie (`NOTION_TASKS_DATABASE_ID`),
+  - wiele rozmów tej samej firmy ląduje na jednej stronie firmy (jeden "subpage" deala).
+
+Format wpisu calla:
+  - nagłówek rozmowy (`YYYY-MM-DD — title (source)`),
+  - bullet: data + attendees,
+  - bullet: summary,
+  - bullet: link do transcriptu/nagrania.
+
+Zakres "auto webhook" (następny krok):
+  - obecny tryb to one-shot CLI trigger,
+  - webhook Fireflies/Calendly można podpiąć do tego samego mechanizmu bez zmiany modelu danych.
 
 
 ================================================================================

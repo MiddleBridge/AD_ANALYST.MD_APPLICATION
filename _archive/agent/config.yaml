@@ -1,0 +1,68 @@
+inovo_thesis:
+  # Keep these as fund-level "knobs" — routing logic reads this file.
+  # Update to your current fund thesis without touching code.
+
+  # Stage mandate (string match; normalized to lowercase).
+  allowed_stages:
+    - pre-seed
+    - seed
+    - series-a
+
+  # HQ countries that are a direct mandate match (normalize to lowercase).
+  # NOTE: This is intentionally explicit (no hallucinated geo matches).
+  allowed_hq_countries:
+    - poland
+    - czech republic
+    - slovakia
+    - hungary
+    - romania
+    - bulgaria
+    - croatia
+    - slovenia
+    - estonia
+    - latvia
+    - lithuania
+    - serbia
+    - ukraine
+    - moldova
+
+  # Markets served that count as geo match even if HQ is elsewhere (diaspora / go-to-market).
+  allowed_geo_markets:
+    - poland
+    - czech republic
+    - slovakia
+    - hungary
+    - romania
+    - bulgaria
+    - croatia
+    - slovenia
+    - estonia
+    - latvia
+    - lithuania
+    - serbia
+    - ukraine
+    - moldova
+
+  # Sectors the fund is biased towards (high-level).
+  focus_sectors:
+    - devtools
+    - ai
+    - data
+    - b2b saas
+    - fintech
+    - healthcare
+    - marketplaces
+
+  # Ticket size (EUR) — used only for fit rationale, not hard-rejects by default.
+  ticket_size_eur_min: 500000
+  ticket_size_eur_max: 7000000
+
+  # Keyword hints for deterministic thesis_match (low-stakes; never overrides sources).
+  # Keys: canonical sector name; values: keywords to match in product.category + one_liner.
+  sector_keywords:
+    devtools: ["developer", "devtools", "sdk", "api", "ci/cd", "observability", "monitoring"]
+    ai: ["ai", "llm", "copilot", "agent", "machine learning", "ml"]
+    data: ["data", "analytics", "warehouse", "etl", "reverse etl", "bi"]
+    fintech: ["payments", "banking", "lending", "kyc", "fraud"]
+    healthcare: ["healthcare", "clinical", "medical", "hipaa", "ehr"]
+
