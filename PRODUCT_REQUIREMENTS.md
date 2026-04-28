@@ -17,7 +17,7 @@ Poniższe zasady są obowiązkowym baseline dla całego produktu i wszystkich zm
 
 Ten plik jest **kontraktem produktowym**, nie README repo: opisuje *dlaczego* i *co ma być dowiezione*. **Indeks canonical** (appendix) wskazuje pliki jako źródło prawdy — żeby nie dublować dokumentacji technicznej na początku lektury.
 
-Szczegóły modułów i uruchomienie → **[ARCHITECTURE.md](ARCHITECTURE.md)**
+Szczegóły modułów i uruchomienie → **[SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md)**
 
 ### Reguła canonical (PRD vs kod vs implementacja)
 
@@ -25,7 +25,7 @@ Szczegóły modułów i uruchomienie → **[ARCHITECTURE.md](ARCHITECTURE.md)**
 - **Kod** — źródło prawdy dla **bieżącego** zachowania wdrożenia (co faktycznie robi binarka dziś).
 - Jeśli PRD i kod się rozjeżdżają: traktuj to jako **lukę produktową** — albo aktualizujesz **kod** do PRD, albo świadomie zmieniasz **PRD** z krótkim uzasadnieniem. Nie wolno „po cichu” uznać kodu za produkt bez oznaczenia (wtedy dopisz krótką notatkę „stan implementacji” w PRD lub ticket).
 
-Szczegóły implementacyjne (np. nazwy funkcji, env, sufity tokenów domyślne) żyją w **`ARCHITECTURE.md`** i plikach wskazanych w appendixie — PRD utrzymuje **kontrakty jakościowe i behawioralne**, nie zastępuje README kompilacji.
+Szczegóły implementacyjne (np. nazwy funkcji, env, sufity tokenów domyślne) żyją w **`SYSTEM_ARCHITECTURE.md`** i plikach wskazanych w appendixie — PRD utrzymuje **kontrakty jakościowe i behawioralne**, nie zastępuje README kompilacji.
 
 ---
 
@@ -62,7 +62,7 @@ North star powyżej zostaje; poniżej **progi operacyjne**, żeby „działa” 
 - **Gate 1:** wskaźnik false negative / false positive na **zestawie referencyjnym** poniżej uzgodnionego progu (patrz [§ 27](#27-evaluation-harness)).
 - **Bezpieczeństwo outbound:** **0** automatycznie wysłanych maili do founderów (poza szkicem).
 - **Odporność na Notion:** błąd sync Notion **nigdy** nie kasuje ani nie fałszuje rekordu w SQLite.
-- **Czas i koszt (orientacyjnie):** mediana pełnego screeningu deck poniżej **X** min, www poniżej **Y** min; szacunkowy koszt LLM pełnego przebiegu poniżej **$Z** przy domyślnych limitach, o ile włączony nie jest kosztowny external / nie zmienisz modeli (szczegóły liczenia → telemetria w kodzie i `ARCHITECTURE.md`).
+- **Czas i koszt (orientacyjnie):** mediana pełnego screeningu deck poniżej **X** min, www poniżej **Y** min; szacunkowy koszt LLM pełnego przebiegu poniżej **$Z** przy domyślnych limitach, o ile włączony nie jest kosztowny external / nie zmienisz modeli (szczegóły liczenia → telemetria w kodzie i `SYSTEM_ARCHITECTURE.md`).
 
 ---
 
@@ -237,7 +237,7 @@ Wszystkie sekcje poniżej są **projekcją z SQLite** (kolumny w `storage/databa
 
 ### Limity kosztowe i tokenów (kontrakt produktowy)
 
-System **musi** pozwalać na konfigurowalne sufity kosztowe per etap LLM (żeby jeden pipeline nie „zjadał” budżetu). Bieżące wartości domyślne, nazwy zmiennych env i tablica sufitów są utrzymywane w **`config/llm_cost.py`** i opisane w **`ARCHITECTURE.md`** — nie duplikujemy ich tu, żeby PRD nie rozjeżdżał się przy zmianie domyślnych liczb.
+System **musi** pozwalać na konfigurowalne sufity kosztowe per etap LLM (żeby jeden pipeline nie „zjadał” budżetu). Bieżące wartości domyślne, nazwy zmiennych env i tablica sufitów są utrzymywane w **`config/llm_cost.py`** i opisane w **`SYSTEM_ARCHITECTURE.md`** — nie duplikujemy ich tu, żeby PRD nie rozjeżdżał się przy zmianie domyślnych liczb.
 
 **Zasady produktowe:** każdy etap LLM ma mieć znany **model** (ciężki vs lekki), **limit wyjścia** i zapisywaną **telemetrię** tokenów tam gdzie wdrożone; raport kosztowy ma być widoczny w przebiegu (terminal / DB).
 
@@ -313,11 +313,11 @@ Schemat: **Deck** i **WWW** → **SQLite** → opcj. **Gate 2.5** → **Notion**
 
 ## 14. Scoring and confidence
 
-**Pytania analityczne per wymiar (evidence, capy, why_not_higher, …):** [§ 24](#24-llm-screening-question-map) + szczegóły w **[LLM_SCREENING_SPEC.md](LLM_SCREENING_SPEC.md)** (wspólnie z `SCREENING_RUBRIC.md`).
+**Pytania analityczne per wymiar (evidence, capy, why_not_higher, …):** [§ 24](#24-llm-screening-question-map) + szczegóły w **`SCREENING_SCORECARD.md`**.
 
 ### Deck — wymiary VC
 
-**Kontrakt logiczny:** score 1–10, uzasadnienie, evidence / missing / why_not_higher wg **`agents/schemas.py`** (`Gate2ScoreOutput`, `DimensionScore`). Lista wymiarów i wagi → **`SCREENING_RUBRIC.md`**, `config/scoring.py`, `GATE2_PASS_THRESHOLD`.
+**Kontrakt logiczny:** score 1–10, uzasadnienie, evidence / missing / why_not_higher wg **`agents/schemas.py`** (`Gate2ScoreOutput`, `DimensionScore`). Lista wymiarów i wagi → **`SCREENING_SCORECARD.md`**, `config/scoring.py`, `GATE2_PASS_THRESHOLD`.
 
 ### Website (`assess-url`)
 
@@ -386,7 +386,7 @@ Polityka źródeł i konfliktów → [§ 31](#31-external-source-policy).
 
 ## 17. Evaluation and audit
 
-Wymóg szczegółowy i zestaw referencyjny → [§ 27. Evaluation harness](#27-evaluation-harness). Oczekiwane odpowiedzi modeli muszą być zgodne z mapą pytań → [§ 24](#24-llm-screening-question-map) / **`LLM_SCREENING_SPEC.md`**.
+Wymóg szczegółowy i zestaw referencyjny → [§ 27. Evaluation harness](#27-evaluation-harness). Oczekiwane odpowiedzi modeli muszą być zgodne z mapą pytań → [§ 24](#24-llm-screening-question-map) / **`SCREENING_SCORECARD.md`**.
 
 Krótko: eval jest **częścią produktu** dla agenta LLM — nie „po premierze”. Zmiana promptu / rubryki / modelu bez kontroli regresji na zestawie referencyjnym jest **świadomą decyzją**, nie przypadkiem.
 
@@ -444,7 +444,7 @@ Poniżej integracje używane przez produkt, obowiązkowość oraz **canonical im
 
 ## 22. Acceptance criteria
 
-Poniżej kryteria akceptacji **behawioralne** (Given / When / Then). Szczegóły techniczne (np. `MAX_PDF_MB`) → `ARCHITECTURE.md` i env.
+Poniżej kryteria akceptacji **behawioralne** (Given / When / Then). Szczegóły techniczne (np. `MAX_PDF_MB`) → `SYSTEM_ARCHITECTURE.md` i env.
 
 ### Email + PDF (ścieżka Gmail)
 
@@ -494,7 +494,7 @@ Wszystkie kroki LLM, które zasilają `deals`, muszą spełniać:
 
 Ten paragraf to **warstwa analityczna**: *jakie klasy pytań* LLM musi rozstrzygnąć na każdym etapie. Nie zastępuje promptów ani rubryki — je **spiął** dla agentów / kodu.
 
-**Pełna rozpiska (drzewo pytań, Gate 1 / 2A / 2B / 2C / 2.5 / www, reguły missing, overall z kodu):** → **[LLM_SCREENING_SPEC.md](LLM_SCREENING_SPEC.md)**
+**Pełna rozpiska scoringu i wymagań analitycznych:** → **`SCREENING_SCORECARD.md`** + sekcje [§ 24](#24-llm-screening-question-map) i [§ 27](#27-evaluation-harness).
 
 ### Skrót per gate
 
@@ -502,7 +502,7 @@ Ten paragraf to **warstwa analityczna**: *jakie klasy pytań* LLM musi rozstrzyg
 |------|--------------------|-------------------------------------|
 | **Gate 1** | Treść maila (+ meta PDF, bez decku) | Mandat Inovo: geo / stage / sector / „czy pitch”, `FAIL_CONFIDENT` tylko przy dowodzie w mailu; przy niepewności + PDF → `UNCERTAIN_READ_DECK` |
 | **Gate 2A** | Markdown decku (+ kontekst maila w polu trusted) | **Tylko fakty** — tożsamość, problem, produkt, klient, rynek, traction z liczbami/cytatami, zespół, fundraising, konkurencja, **missing** — **bez** score’ów VC |
-| **Gate 2B** | JSON faktów | Dla każdego z **11 wymiarów** (`agents/schemas.py`): score, evidence, missing, why_not_higher/lower, confidence — zgodnie z **`SCREENING_RUBRIC.md`** |
+| **Gate 2B** | JSON faktów | Dla każdego z **11 wymiarów** (`agents/schemas.py`): score, evidence, missing, why_not_higher/lower, confidence — zgodnie z **`SCREENING_SCORECARD.md`** |
 | **Gate 2C** | Fakty + wymiary + overall z **kodu** | Brief partnerski: **bez nowych faktów** — tylko synteza 2A/2B |
 | **Gate 2.5** | Fakty + kontekst | Plan zapytań → źródła → ocena zewnętrzna; konflikty jawne ([§ 31](#31-external-source-policy)) |
 | **WWW** | Crawl strony | Ta sama **logika gatunkowa** co wyżej, z klasyfikacją *stated vs inferred vs missing* ([§ 30](#30-website-screening-contract)) |
@@ -513,7 +513,7 @@ Ten paragraf to **warstwa analityczna**: *jakie klasy pytań* LLM musi rozstrzyg
 
 ## 25. Minimum screening rubric contract
 
-`SCREENING_RUBRIC.md` jest **obowiązkowym** dokładnym opisem rubryki dla scorecardu deck (11 wymiarów). Dla każdego wymiaru musi być możliwe uzasadnienie:
+`SCREENING_SCORECARD.md` jest **obowiązkowym** dokładnym opisem rubryki dla scorecardu deck (11 wymiarów). Dla każdego wymiaru musi być możliwe uzasadnienie:
 
 - **nazwa i definicja** — co mierzy;
 - **skala 1–10** — sens punktacji;
@@ -532,7 +532,7 @@ Zmiana rubryki bez bumpu wersji (patrz [§ 26](#26-prompt-rubric-and-model-versi
 
 Każdy **zapisany wynik screeningowy** powinien umożliwiać odtworzenie kontekstu scoringu:
 
-- **wersja / hash** rubryki (`SCREENING_RUBRIC.md`) i/lub `config/scoring.py`;
+- **wersja / hash** rubryki (`SCREENING_SCORECARD.md`) i/lub `config/scoring.py`;
 - **wersja / hash** zestawu promptów (`config/prompts.py`, `config/prompts/external_*.md`);
 - **nazwa modelu** i provider (`OPENAI_MODEL`, `OPENAI_MODEL_LIGHT`, ewentualne override’y per krok);
 - **tryb external** (Tavily vs LLM-only: `EXTERNAL_WEB_SEARCH`, `TAVILY_*`);
@@ -673,10 +673,10 @@ PRD **nie** duplikuje README ani pełnego drzewa plików; poniżej hierarchia do
 
 | Dokument / artefakt | Co jest w nim „prawdą” | Relacja do PRD |
 |---------------------|-------------------------|----------------|
-| **`PRD.md`** (ten plik) | Wymagania, journeys, kryteria sukcesu; appendix canonical | Główny dokument produktowy dla MVP |
-| **`ARCHITECTURE.md`** | Przepływ techniczny szczegółowy (np. pre-filter Gmail, diagram Gate 1/2), **struktura plików**, uruchomienie, `.env`, koszty | Uzupełnienie techniczne — PRD **nie** zastępuje go; brakujące szczegóły implementacji → tam |
-| **`SCREENING_RUBRIC.md`** | Definicje wymiarów i wag scorecardu (deck) | PRD odsyła tu dla rubryki |
-| **`LLM_SCREENING_SPEC.md`** | **Mapa pytań analitycznych** per Gate (1, 2A, 2B, 2C, 2.5, www) + drzewo | Kontrakt „co LLM musi rozstrzygnąć”; prompty w `config/prompts.py` muszą być z tym spójne |
+| **`PRODUCT_REQUIREMENTS.md`** (ten plik) | Wymagania, journeys, kryteria sukcesu; appendix canonical | Główny dokument produktowy dla MVP |
+| **`SYSTEM_ARCHITECTURE.md`** | Przepływ techniczny szczegółowy (np. pre-filter Gmail, diagram Gate 1/2), **struktura plików**, uruchomienie, `.env`, koszty | Uzupełnienie techniczne — PRD **nie** zastępuje go; brakujące szczegóły implementacji → tam |
+| **`SCREENING_SCORECARD.md`** | Definicje wymiarów i wag scorecardu (deck) | PRD odsyła tu dla rubryki |
+| **`SCREENING_SCORECARD.md`** | Rubryka i kryteria analityczne dla scorecardu | Kontrakt „co LLM musi rozstrzygnąć”; prompty w `config/prompts.py` muszą być z tym spójne |
 | **`storage/database.py`** | **Schema tabeli `deals`** (kolumny, migracje), funkcje zapisu | **Źródło prawdy dla pól rekordu deala** |
 | **`main.py`** | Kolejność orchestracji (`process_email`, `run_assess_url`), **`final_action`**, progi środowiskowe | **Źródło prawdy dla zachowania pipeline’u** |
 | **`agents/screener.py`** | `gate1_fit_check`, `run_gate2_pipeline` | Implementacja Gate 1/2 (deck) |
@@ -700,8 +700,8 @@ PRD **nie** duplikuje README ani pełnego drzewa plików; poniżej hierarchia do
 | Kolejność: Gate 1 → PDF → Gate 2 (mail) | `main.py` → `process_email` |
 | Werdykt Gate 1 / payload LLM | `agents/screener.py` + `config/prompts.py` (`GATE1_*`) |
 | Ekstrakcja i scorecard deck | `agents/screener.py` `run_gate2_pipeline`, `config/prompts.py` (`GATE2A/B/C_*`) |
-| Wymiary i typy pól scorecardu | `agents/schemas.py`, `SCREENING_RUBRIC.md`, `config/scoring.py` |
-| Mapa pytań LLM per Gate | **`LLM_SCREENING_SPEC.md`** (kontrakt analityczny; prompty muszą być spójne) |
+| Wymiary i typy pól scorecardu | `agents/schemas.py`, `SCREENING_SCORECARD.md`, `config/scoring.py` |
+| Mapa pytań LLM per Gate | `PRODUCT_REQUIREMENTS.md` §24 + `SCREENING_SCORECARD.md` (kontrakt analityczny; prompty muszą być spójne) |
 | Ścieżka www | `main.py` (`run_assess_url`), `agents/website_screener.py`, powiązane moduły `agents/website_*.py` |
 | **`final_action`**, decyzje screeningowe | `main.py` (`process_email`, `run_assess_url`), `save_screening_decisions` |
 | Gate 2.5 + Tavily (shape odpowiedzi) | `agents/schemas_gate25.py`, `agents/external_check.py`, `agents/external_research.py`, prompty `config/prompts/external_*.md`, `.env` (`TAVILY_*`, `EXTERNAL_WEB_SEARCH`) |

@@ -188,5 +188,5 @@ Zakres "auto webhook" (następny krok):
 
 ================================================================================
 Koniec pliku. Szczegóły techniczne i pełny opis architektury:
-patrz README.md oraz PRD.md w tym samym repozytorium.
+patrz README.md oraz PRODUCT_REQUIREMENTS.md w tym samym repozytorium.
 ================================================================================

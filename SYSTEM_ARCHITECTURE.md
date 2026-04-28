@@ -200,8 +200,8 @@ Każdy wymiar ma: **score** (1-10) + **reasoning** (cytat/dowód z decku).
 INOVO_AI/
 │
 ├── main.py                      # Entry point — CLI, polling loop
-├── ARCHITECTURE.md              # Ten dokument
-├── PRD.md                       # Product requirements
+├── SYSTEM_ARCHITECTURE.md       # Ten dokument
+├── PRODUCT_REQUIREMENTS.md      # Product requirements
 ├── requirements.txt
 ├── .env                         # Konfiguracja (nie commitować)
 ├── credentials.json             # Gmail OAuth credentials
