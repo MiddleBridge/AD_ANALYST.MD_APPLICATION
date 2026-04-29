@@ -136,14 +136,14 @@ class Gate2Result:
     evidence_ledger: list[dict[str, Any]] = field(default_factory=list)
     # Staged-screening fields
     screening_depth: str = ScreeningDepth.INITIAL.value
-    innovo_fit_decision: str = ""
+    fund_fit_decision: str = ""
     deck_evidence_decision: str = ""
     generic_vc_interest: str = ""
     final_action: str = ""
     auth_risk: str = AuthRisk.MEDIUM.value
     deck_evidence_score: float = 0.0
     external_opportunity_score: Optional[float] = None
-    innovo_fit_score: float = 0.0
+    fund_fit_score: float = 0.0
     debug_override_used: bool = False
     continued_because_debug_override: bool = False
     test_case: bool = False
@@ -153,7 +153,7 @@ class Gate2Result:
 class ScoreBundle:
     deck_evidence_score: float
     external_opportunity_score: Optional[float]
-    innovo_fit_score: float
+    fund_fit_score: float
 
 
 @dataclass

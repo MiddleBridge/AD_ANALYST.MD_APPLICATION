@@ -38,7 +38,7 @@ class ExternalSource(BaseModel):
         if v is None or v == "":
             return None
         s = str(v).strip().lower()
-        if "example.com" in s or s.startswith("http://localhost"):
+        if "example.com" in s or s.startswith("http://example-host"):
             return None
         return str(v).strip()
 

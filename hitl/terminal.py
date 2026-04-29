@@ -1,5 +1,5 @@
 """
-HITL terminal — clean 1-pager brief for Inovo.VC partner review.
+HITL terminal — clean 1-pager brief for Example VC Fund partner review.
 """
 from rich.console import Console
 from rich.panel import Panel
@@ -50,7 +50,7 @@ def _bar(score: int) -> str:
 
 def display_brief(brief: Brief) -> None:
     console.print()
-    console.rule("[bold cyan]INOVO.VC — DEAL BRIEF[/bold cyan]")
+    console.rule("[bold cyan]EXAMPLE VC FUND — DEAL BRIEF[/bold cyan]")
     console.print()
 
     rec_color  = REC_COLORS.get(brief.recommendation, "white")

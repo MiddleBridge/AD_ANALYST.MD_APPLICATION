@@ -1,6 +1,6 @@
 """Optional web snippets pass for CEE founder / diaspora roots.
 
-Sites often emphasize US HQ while omitting European origin. Inovo mandates CEE *or*
+Sites often emphasize US HQ while omitting European origin. Fund mandates CEE *or*
 diaspora — this module runs **country-agnostic** search queries, then scores snippets
 against a shared CEE lexicon (aligned with ``config.criteria.CRITERIA['geographies']``).
 
@@ -256,8 +256,8 @@ def resolve_founder_roots_cee(
         )
 
     # Domains that are not valid external sources for nationality evidence —
-    # they're VC portfolio pages that only exist for Inovo's own companies.
-    _SKIP_DOMAINS = ("inovo.vc", "inovo.pl")
+    # they're VC portfolio pages that only exist for Fund's own companies.
+    _SKIP_DOMAINS = ("example.vc", "example.vc")
 
     def _is_valid_source(url: str) -> bool:
         u = (url or "").lower()

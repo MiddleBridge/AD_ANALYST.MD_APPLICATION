@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 """
-Inovo.VC Inbound Screening Agent
+Example VC Fund Inbound Screening Agent
 Usage:
   python main.py              # continuous polling mode
   python main.py --once       # process all current unread emails, then exit
@@ -27,16 +27,16 @@ from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 from rich.console import Console
-from agents.inovo_decision import (
+from agents.fund_decision import (
     Blockers,
-    apply_inovo_geo_rule,
-    build_inovo_mandate_fit,
+    apply_fund_geo_rule,
+    build_fund_mandate_fit,
     classify_stage,
-    inovo_verdict,
+    fund_verdict,
     investment_interest_from_scores,
     map_verdict_to_action,
 )
-from agents.inovo_domain import InovoGeoAssessment
+from agents.fund_domain import FundGeoAssessment
 
 load_dotenv()
 
@@ -135,13 +135,13 @@ def _assess_sender_authority(email_data, company_name: str) -> tuple[bool, str, 
     domain = domain.lower()
     local = local.lower()
     free_domains = {
-        "gmail.com",
-        "outlook.com",
-        "hotmail.com",
-        "yahoo.com",
-        "icloud.com",
-        "proton.me",
-        "protonmail.com",
+        "example-mail.com",
+        "example-outlook.com",
+        "example-hotmail.com",
+        "example-yahoo.com",
+        "example-icloud.com",
+        "example-proton.me",
+        "example-protonmail.com",
     }
 
     # Company-domain style email is usually enough for MVP pass.
@@ -192,7 +192,7 @@ def _auth_risk_from_sender(suspicious_sender: bool) -> str:
     return "HIGH" if suspicious_sender else "LOW"
 
 
-def _innovo_fit_score_from_gate1(gate1, *, auth_risk: str) -> float:
+def _fund_fit_score_from_gate1(gate1, *, auth_risk: str) -> float:
     if gate1.verdict == "FAIL_CONFIDENT":
         return 1.0
     base = 7.0 if gate1.verdict == "PASS" else 5.0
@@ -206,24 +206,24 @@ def _initial_output_template(
     company: str,
     auth_risk: str,
     auth_reason: str,
-    innovo_fit_line: str,
+    fund_fit_line: str,
     what_they_do: str,
     evidence: str,
     missing: str,
     deck_score: str,
     external_score: str,
-    innovo_fit_score: str,
+    fund_fit_score: str,
     decision_line: str,
     next_action: str,
 ) -> str:
     text = (
         f"Company: {company}\n"
         f"Source/Auth Risk: {auth_risk} — {auth_reason}\n"
-        f"Innovo Fit: {innovo_fit_line}\n"
+        f"Fund Fit: {fund_fit_line}\n"
         f"What They Do: {what_they_do}\n"
         f"Evidence: {evidence}\n"
         f"Missing / Blockers: {missing}\n"
-        f"Scores: Deck Evidence {deck_score}; External Opportunity {external_score}; Innovo Fit {innovo_fit_score}.\n"
+        f"Scores: Deck Evidence {deck_score}; External Opportunity {external_score}; Fund Fit {fund_fit_score}.\n"
         f"Decision: {decision_line}\n"
         f"Next Action: {next_action}"
     ).strip()
@@ -351,7 +351,7 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
         continued_because_debug_override = False
         auth_risk = _auth_risk_from_sender(suspicious_sender)
         test_case = _is_test_case(email_data, gate1)
-        innovo_fit_score = _innovo_fit_score_from_gate1(gate1, auth_risk=auth_risk)
+        fund_fit_score = _fund_fit_score_from_gate1(gate1, auth_risk=auth_risk)
     
         if gate1.verdict == "FAIL_CONFIDENT":
             allow_continue = debug_override or manual_override or force_rescan
@@ -360,14 +360,14 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
                     company=(gate1.company_name or "Unknown"),
                     auth_risk=auth_risk,
                     auth_reason=sender_reason,
-                    innovo_fit_line=f"FAIL — {gate1.rejection_reason or 'Out of Innovo mandate.'}",
+                    fund_fit_line=f"FAIL — {gate1.rejection_reason or 'Out of Fund mandate.'}",
                     what_they_do=(gate1.company_one_liner or "unknown"),
                     evidence="[EMAIL] Gate 1 fit classification. [MISSING] Deck-level evidence not analyzed due to hard stop.",
                     missing="[MISSING] deck extraction, traction metrics, pricing/monetization, verified sender-company link.",
                     deck_score="NOT_RUN",
                     external_score="NOT_RUN",
-                    innovo_fit_score="1.0/10",
-                    decision_line="Innovo Fit FAIL; Deck Evidence NEEDS_MORE_INFO; Generic VC Interest REJECT.",
+                    fund_fit_score="1.0/10",
+                    decision_line="Fund Fit FAIL; Deck Evidence NEEDS_MORE_INFO; Generic VC Interest REJECT.",
                     next_action="STOP",
                 )
                 console.print("[red]✗ Gate 1 FAIL_CONFIDENT[/red]")
@@ -376,13 +376,13 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
                     email_data.message_id,
                     screening_depth="INITIAL",
                     auth_risk=auth_risk,
-                    innovo_fit_decision="FAIL",
+                    fund_fit_decision="FAIL",
                     deck_evidence_decision="NEEDS_MORE_INFO",
                     generic_vc_interest="REJECT",
                     final_action="STOP",
                     deck_evidence_score=None,
                     external_opportunity_score=None,
-                    innovo_fit_score=1.0,
+                    fund_fit_score=1.0,
                     debug_override_used=False,
                     continued_because_debug_override=False,
                     test_case=test_case,
@@ -393,7 +393,7 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
             if debug_override and not manual_override:
                 continued_because_debug_override = True
                 console.print(
-                    "[yellow]⚠ Innovo Fit: FAIL. Analysis continued only because debug/manual override is enabled.[/yellow]"
+                    "[yellow]⚠ Fund Fit: FAIL. Analysis continued only because debug/manual override is enabled.[/yellow]"
                 )
                 console.print(
                     "[dim]Production decision would have stopped at Gate 1. Gate 2 was run only for debugging/test evaluation.[/dim]"
@@ -548,14 +548,14 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
             },
         ]
     
-        # Decision split: Innovo Fit vs Deck Evidence vs Generic VC Interest
+        # Decision split: Fund Fit vs Deck Evidence vs Generic VC Interest
         deck_evidence_score = float(gate2.overall_score)
-        innovo_fit_decision = "PASS" if gate1.verdict == "PASS" else ("UNCERTAIN" if gate1.verdict == "UNCERTAIN_READ_DECK" else "FAIL")
+        fund_fit_decision = "PASS" if gate1.verdict == "PASS" else ("UNCERTAIN" if gate1.verdict == "UNCERTAIN_READ_DECK" else "FAIL")
         deck_evidence_decision = "PASS" if gate2.passes else "NEEDS_MORE_INFO"
         generic_vc_interest = "PASS_TO_CALL" if gate2.overall_score >= 7.0 else ("WATCHLIST" if gate2.overall_score >= 5.0 else "REJECT")
     
         # ENRICHED trigger gating
-        fit_ok_for_enriched = innovo_fit_decision in ("PASS", "UNCERTAIN")
+        fit_ok_for_enriched = fund_fit_decision in ("PASS", "UNCERTAIN")
         enriched_trigger = fit_ok_for_enriched and auth_risk != "HIGH" and deck_evidence_score >= 5.5
         wants_enriched_depth = screening_depth in ("ENRICHED", "DEEP_DIVE")
         enable_external = wants_enriched_depth and enriched_trigger and _bool_env("ENABLE_EXTERNAL_CHECK", "1")
@@ -565,7 +565,7 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
         final_action = "RUN_ENRICHED_SCREEN" if enable_external else "STOP"
         if test_case:
             final_action = "TEST_CASE_ONLY"
-        if continued_because_debug_override and innovo_fit_decision == "FAIL":
+        if continued_because_debug_override and fund_fit_decision == "FAIL":
             final_action = "TEST_CASE_ONLY"
         defer = enable_external and gate2.passes
     
@@ -602,13 +602,13 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
             snapshot_md=snapshot or None,
             screening_depth=screening_depth,
             auth_risk=auth_risk,
-            innovo_fit_decision=innovo_fit_decision,
+            fund_fit_decision=fund_fit_decision,
             deck_evidence_decision=deck_evidence_decision,
             generic_vc_interest=generic_vc_interest,
             final_action=final_action,
             deck_evidence_score=deck_evidence_score,
             external_opportunity_score=external_score_for_db,
-            innovo_fit_score=innovo_fit_score,
+            fund_fit_score=fund_fit_score,
             debug_override_used=(debug_override or manual_override),
             continued_because_debug_override=continued_because_debug_override,
             test_case=test_case,
@@ -628,14 +628,14 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
                 company=(gate2.company_name or gate1.company_name or "Unknown"),
                 auth_risk=auth_risk,
                 auth_reason=sender_reason,
-                innovo_fit_line=f"{innovo_fit_decision} — {gate1.rejection_reason or gate1.detected_geography}",
+                fund_fit_line=f"{fund_fit_decision} — {gate1.rejection_reason or gate1.detected_geography}",
                 what_they_do=(gate2.what_they_do or gate2.company_one_liner or "unknown"),
                 evidence="[DECK] See evidence lines in VC Snapshot. [EMAIL] sender/pitch context. [INFERRED] explicitly marked in concerns.",
                 missing="[MISSING] " + ", ".join((gate2.missing_critical_data or [])[:6]),
                 deck_score=f"{deck_evidence_score:.1f}/10",
                 external_score=("NOT_RUN" if not enable_external else "PENDING"),
-                innovo_fit_score=f"{innovo_fit_score:.1f}/10",
-                decision_line=f"Innovo Fit {innovo_fit_decision}; Deck Evidence {deck_evidence_decision}; Generic VC Interest {generic_vc_interest}.",
+                fund_fit_score=f"{fund_fit_score:.1f}/10",
+                decision_line=f"Fund Fit {fund_fit_decision}; Deck Evidence {deck_evidence_decision}; Generic VC Interest {generic_vc_interest}.",
                 next_action=final_action,
             )
             console.print(initial_note[:2200])
@@ -650,14 +650,14 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
                 company=(gate2.company_name or gate1.company_name or "Unknown"),
                 auth_risk=auth_risk,
                 auth_reason=sender_reason,
-                innovo_fit_line=f"{innovo_fit_decision} — {gate1.rejection_reason or gate1.detected_geography}",
+                fund_fit_line=f"{fund_fit_decision} — {gate1.rejection_reason or gate1.detected_geography}",
                 what_they_do=(gate2.what_they_do or gate2.company_one_liner or "unknown"),
                 evidence="[DECK]/[EMAIL] See VC Snapshot evidence block.",
                 missing="[MISSING] " + ", ".join((gate2.missing_critical_data or [])[:6]),
                 deck_score=f"{gate2.overall_score:.1f}/10",
                 external_score="NOT_RUN",
-                innovo_fit_score=f"{innovo_fit_score:.1f}/10",
-                decision_line=f"Innovo Fit {innovo_fit_decision}; Deck Evidence {deck_evidence_decision}; Generic VC Interest {generic_vc_interest}.",
+                fund_fit_score=f"{fund_fit_score:.1f}/10",
+                decision_line=f"Fund Fit {fund_fit_decision}; Deck Evidence {deck_evidence_decision}; Generic VC Interest {generic_vc_interest}.",
                 next_action=final_action,
             )
             console.print()
@@ -772,13 +772,13 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
                 email_data.message_id,
                 screening_depth=screening_depth,
                 auth_risk=auth_risk,
-                innovo_fit_decision=innovo_fit_decision,
+                fund_fit_decision=fund_fit_decision,
                 deck_evidence_decision=deck_evidence_decision,
                 generic_vc_interest=generic_vc_interest,
                 final_action=final_action,
                 deck_evidence_score=deck_evidence_score,
                 external_opportunity_score=external_score_for_db,
-                innovo_fit_score=innovo_fit_score,
+                fund_fit_score=fund_fit_score,
                 debug_override_used=(debug_override or manual_override),
                 continued_because_debug_override=continued_because_debug_override,
                 test_case=test_case,
@@ -813,7 +813,7 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
             if _post_g2_status == db.STATUS_SKIPPED_COST_CAP:
                 final_action = "STOP"
             else:
-                final_action = "STOP" if innovo_fit_decision == "FAIL" else (
+                final_action = "STOP" if fund_fit_decision == "FAIL" else (
                     "ASK_FOR_MORE_INFO" if deck_evidence_score < 7.0 else "PASS_TO_PARTNER"
                 )
             if test_case or continued_because_debug_override:
@@ -822,13 +822,13 @@ def process_email(email_data, gmail_client=None, *, force_rescan: bool = False) 
                 email_data.message_id,
                 screening_depth=screening_depth,
                 auth_risk=auth_risk,
-                innovo_fit_decision=innovo_fit_decision,
+                fund_fit_decision=fund_fit_decision,
                 deck_evidence_decision=deck_evidence_decision,
                 generic_vc_interest=generic_vc_interest,
                 final_action=final_action,
                 deck_evidence_score=deck_evidence_score,
                 external_opportunity_score=None,
-                innovo_fit_score=innovo_fit_score,
+                fund_fit_score=fund_fit_score,
                 debug_override_used=(debug_override or manual_override),
                 continued_because_debug_override=continued_because_debug_override,
                 test_case=test_case,
@@ -892,7 +892,7 @@ def run_gmail_loop(once: bool = False) -> None:
     from agents.notion_sync import sync_pipeline_to_notion
 
     init_db()
-    console.print("[bold cyan]Inovo.VC Screening Agent[/bold cyan] — starting")
+    console.print("[bold cyan]Example VC Fund Screening Agent[/bold cyan] — starting")
     gmail = GmailClient()
     console.print("[green]Gmail authenticated[/green]")
 
@@ -1452,8 +1452,8 @@ def run_assess_url(url: str) -> None:
         geo_status = "no_cee_signal"
     else:
         geo_status = "unknown"
-    geo_decision = apply_inovo_geo_rule(
-        InovoGeoAssessment(
+    geo_decision = apply_fund_geo_rule(
+        FundGeoAssessment(
             status=geo_status,
             strongest_signal=gate1.detected_geography or None,
             confidence=0.8 if geo_status == "confirmed_cee" else (0.55 if geo_status == "possible_cee" else 0.3),
@@ -1476,7 +1476,7 @@ def run_assess_url(url: str) -> None:
         sector_decision = "FAIL"
     else:
         sector_decision = "UNCERTAIN"
-    mandate = build_inovo_mandate_fit(
+    mandate = build_fund_mandate_fit(
         geo_decision=geo_decision,
         stage_decision=stage_decision,
         sector_decision=sector_decision,
@@ -1499,7 +1499,7 @@ def run_assess_url(url: str) -> None:
         has_hard_fail=(gate1.verdict == "FAIL_CONFIDENT" and geo_status == "no_cee_signal"),
         reasons=(["gate1_fail_confident"] if gate1.verdict == "FAIL_CONFIDENT" else []),
     )
-    verdict_new = inovo_verdict(
+    verdict_new = fund_verdict(
         mandate_fit=mandate.overall,
         investment_interest=interest.overall,
         confidence=0.8 if str(getattr(gate1, "confidence", "")).upper() == "HIGH" else 0.6,
@@ -1508,7 +1508,7 @@ def run_assess_url(url: str) -> None:
     final_action = map_verdict_to_action(verdict_new)
     if final_decision is not None and getattr(final_decision, "final_verdict", "") == "REJECT_AUTO":
         final_action = "STOP"
-    innovo_fit_decision = mandate.overall
+    fund_fit_decision = mandate.overall
     deck_evidence_decision = "PASS" if float(assessment.vc_score or 0) >= 6.0 else "NEEDS_MORE_INFO"
     generic_vc_interest = (
         "PASS_TO_CALL" if interest.overall == "HIGH" else
@@ -1516,11 +1516,11 @@ def run_assess_url(url: str) -> None:
     )
 
     # VC-first terminal memo (same order as Notion contract)
-    console.print("\n[bold]0. Inovo Decision[/bold]")
+    console.print("\n[bold]0. Fund Decision[/bold]")
     console.print(f"Company: {assessment.company_name or 'Unknown'}")
     console.print(f"Website: {assessment.website_url}")
     console.print(f"Verdict: {verdict_new}")
-    console.print(f"Inovo Fit: {mandate.overall}")
+    console.print(f"Fund Fit: {mandate.overall}")
     console.print(f"Investment Interest: {interest.overall}")
     console.print(f"Confidence: {'High' if str(getattr(gate1, 'confidence', '')).upper() == 'HIGH' else 'Medium'}")
     console.print(f"Next Action: {final_action}")
@@ -1528,7 +1528,7 @@ def run_assess_url(url: str) -> None:
     if one_reason:
         console.print(f"One-line reason: {one_reason[:220]}")
 
-    console.print("\n[bold]1. Inovo Fit Check[/bold]")
+    console.print("\n[bold]1. Fund Fit Check[/bold]")
     console.print(f"- Geography / CEE link: {mandate.geography} ({gate1.detected_geography or 'unknown'})")
     console.print(f"- Stage: {mandate.stage} ({gate1.detected_stage or 'unknown'})")
     console.print(f"- Sector: {mandate.sector} ({gate1.detected_sector or facts_d.get('sector') or 'unknown'})")
@@ -1539,15 +1539,15 @@ def run_assess_url(url: str) -> None:
         message_id,
         screening_depth=os.getenv("SCREENING_DEPTH", "INITIAL").strip().upper() or "INITIAL",
         auth_risk="LOW",
-        innovo_fit_decision=innovo_fit_decision,
+        fund_fit_decision=fund_fit_decision,
         deck_evidence_decision=deck_evidence_decision,
         generic_vc_interest=generic_vc_interest,
         final_action=final_action,
         deck_evidence_score=float(assessment.vc_score or 0),
         external_opportunity_score=(float(assessment.external_score) if assessment.external_score is not None else None),
-        innovo_fit_score=(
+        fund_fit_score=(
             1.0
-            if innovo_fit_decision == "FAIL"
+            if fund_fit_decision == "FAIL"
             else (
                 8.0
                 if gate1.verdict == "PASS"
@@ -1573,7 +1573,7 @@ def run_assess_url(url: str) -> None:
             status_map = {
                 "PASS_TO_PARTNER": db.STATUS_WAITING_HITL,
                 "ASK_FOR_MORE_INFO": db.STATUS_WAITING_HITL,
-                "STOP": db.STATUS_REJECTED_GATE1 if innovo_fit_decision == "FAIL" else db.STATUS_REJECTED_GATE2,
+                "STOP": db.STATUS_REJECTED_GATE1 if fund_fit_decision == "FAIL" else db.STATUS_REJECTED_GATE2,
             }
             db.update_status(message_id, status_map.get(final_action, db.STATUS_WAITING_HITL))
 
@@ -1690,7 +1690,7 @@ def main():
             console.print(f"- {e.source_type}: {e.raw_quote} ({e.source_url})")
         return
 
-    parser = argparse.ArgumentParser(description="Inovo.VC Screening Agent")
+    parser = argparse.ArgumentParser(description="Example VC Fund Screening Agent")
     parser.add_argument("--once", action="store_true", help="Process current emails and exit")
     parser.add_argument("--report", action="store_true", help="Print weekly pipeline report")
     parser.add_argument("--sync-notion", action="store_true", help="Sync recent deals to Notion database")

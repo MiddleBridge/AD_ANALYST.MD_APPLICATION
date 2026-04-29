@@ -441,7 +441,7 @@ def _extract_hq_from_snippet(snippet: str) -> tuple[str, str, str]:
     if not s:
         return "", "", ""
 
-    # Example: "Headquarters: Belgrade. Type: Privately Held."
+    # Example: "Headquarters: Belgrade. Type: Company."
     # Snippets often pack multiple fields separated by "·" and sentences; we must cut tightly.
     m = re.search(r"\b(?:Headquarters|HQ location|HQ)\b\s*[:\-]?\s*(.+)$", s, flags=re.I)
     if not m:
@@ -526,7 +526,7 @@ def _weight_for_source(url: str) -> tuple[float, str]:
         return 0.90, "linkedin_company"
     if "prepia.com" in u and any(p in u for p in ("/jobs", "/careers", "/current-jobs", "/job")):
         return 0.85, "official_website_jobs"
-    if "inovo.vc" in u:
+    if "example.vc" in u:
         return 0.85, "investor_portfolio"
     if any(x in u for x in ("therecursive.com", "ain.ua", "balkanengineer.com", "nin.rs", "vestbee.com")):
         return 0.75, "reputable_press"

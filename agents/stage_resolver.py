@@ -69,7 +69,7 @@ def _norm(s: str) -> str:
 
 def _source_weight(url: str) -> tuple[float, str]:
     u = (url or "").lower()
-    if "inovo.vc" in u:
+    if "example.vc" in u:
         return 0.90, "investor_portfolio"
     if "therecursive.com" in u or "vestbee.com" in u or "ain.ua" in u:
         return 0.75, "reputable_press"
@@ -155,7 +155,7 @@ def resolve_stage(
         f"{company_name} seed funding",
         f"{company_name} raises seed",
         f"{company_name} stage seed",
-        f"{company_name} Inovo portfolio seed",
+        f"{company_name} Fund portfolio seed",
     ]
     if domain:
         queries.insert(1, f"{company_name} seed round {domain}")

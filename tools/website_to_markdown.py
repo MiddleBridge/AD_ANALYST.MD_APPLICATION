@@ -82,7 +82,7 @@ _BROWSER_UAS: list[str] = [
     # Recent Chrome on Linux (Tavily/Cloudflare-friendly)
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.91 Safari/537.36",
     # Internal UA (kept for transparency / observability)
-    "InovoWebsiteScreening/1.0",
+    "FundWebsiteScreening/1.0",
 ]
 
 

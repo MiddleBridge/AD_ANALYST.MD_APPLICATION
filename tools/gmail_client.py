@@ -17,10 +17,10 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.labels",
 ]
 
-ALLOWED_SENDER = os.getenv("ALLOWED_SENDER", "dokuzu12@gmail.com")
+ALLOWED_SENDER = os.getenv("ALLOWED_SENDER", "your_email@example.com")
 PITCH_DECK_QUERY = os.getenv(
     "PITCH_DECK_QUERY",
-    f"from:{ALLOWED_SENDER} has:attachment filename:pdf -label:Inovo/Screened",
+    f"from:{ALLOWED_SENDER} has:attachment filename:pdf -label:Fund/Screened",
 )
 
 
@@ -28,8 +28,8 @@ class GmailClient:
     def __init__(self):
         self.credentials_path = os.getenv("GMAIL_CREDENTIALS_PATH", "credentials.json")
         self.token_path = os.getenv("GMAIL_TOKEN_PATH", "token.json")
-        self.processed_label = os.getenv("GMAIL_PROCESSED_LABEL", "Inovo/Screened")
-        self.needs_review_label = os.getenv("GMAIL_NEEDS_REVIEW_LABEL", "Inovo/NeedsReview")
+        self.processed_label = os.getenv("GMAIL_PROCESSED_LABEL", "Fund/Screened")
+        self.needs_review_label = os.getenv("GMAIL_NEEDS_REVIEW_LABEL", "Fund/NeedsReview")
         self.service = self._authenticate()
         self._label_id_cache: dict = {}
 

@@ -78,7 +78,7 @@ def pdf_bytes_to_markdown(pdf_bytes: bytes) -> str:
     Jeśli wynik jest pusty / podejrzanie powtarzalny (typowe decki „obrazkowe”),
     albo PDF_OCR_MODE=always — uruchamiany jest OCR (render + Tesseract).
     """
-    tmp = Path("/tmp/inovo_deck.pdf")
+    tmp = Path("/tmp/fund_deck.pdf")
     tmp.write_bytes(pdf_bytes)
     try:
         primary = pymupdf4llm.to_markdown(str(tmp))
@@ -100,7 +100,7 @@ def pdf_bytes_to_markdown(pdf_bytes: bytes) -> str:
         except OCRNotAvailableError as e:
             ocr_text = ""
             if quality_issue or PDF_OCR_MODE == "always":
-                print(f"[Inovo PDF] OCR niedostępny: {e}", file=sys.stderr)
+                print(f"[Fund PDF] OCR niedostępny: {e}", file=sys.stderr)
 
         if ocr_text.strip():
             if PDF_OCR_MODE == "always" and not quality_issue:

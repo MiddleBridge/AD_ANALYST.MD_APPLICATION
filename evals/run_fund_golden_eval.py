@@ -9,13 +9,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from agents.inovo_decision import (
+from agents.fund_decision import (
     Blockers,
-    apply_inovo_geo_rule,
-    build_inovo_mandate_fit,
-    inovo_verdict,
+    apply_fund_geo_rule,
+    build_fund_mandate_fit,
+    fund_verdict,
 )
-from agents.inovo_domain import InovoGeoAssessment
+from agents.fund_domain import FundGeoAssessment
 
 
 def _stage_decision(stage: str) -> str:
@@ -37,20 +37,20 @@ def _sector_decision(sector: str) -> str:
 
 
 def run_eval() -> int:
-    data_path = Path(__file__).resolve().parent / "inovo_golden_30.jsonl"
+    data_path = Path(__file__).resolve().parent / "fund_golden_30.jsonl"
     rows = [json.loads(x) for x in data_path.read_text(encoding="utf-8").splitlines() if x.strip()]
     ok = 0
     bad = []
     for row in rows:
-        geo_decision = apply_inovo_geo_rule(
-            InovoGeoAssessment(
+        geo_decision = apply_fund_geo_rule(
+            FundGeoAssessment(
                 status=row["geo_status"],
                 strongest_signal=None,
                 confidence=0.7,
                 decision="UNCERTAIN",
             )
         )
-        mandate = build_inovo_mandate_fit(
+        mandate = build_fund_mandate_fit(
             geo_decision=geo_decision,
             stage_decision=_stage_decision(row["stage"]),
             sector_decision=_sector_decision(row["sector"]),
@@ -59,7 +59,7 @@ def run_eval() -> int:
         )
         if row["geo_status"] != "confirmed_cee" and mandate.overall == "PASS":
             mandate.overall = "UNCERTAIN"
-        verdict = inovo_verdict(
+        verdict = fund_verdict(
             mandate_fit=mandate.overall,
             investment_interest=row["interest"],
             confidence=0.7,

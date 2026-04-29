@@ -1,5 +1,5 @@
 # Product Requirements Document
-## Inovo.VC AI Screening Agent
+## Example VC Fund AI Screening Agent
 
 ## Security baseline (safe-by-default)
 
@@ -41,8 +41,8 @@ Inbound pitch decków i leadów ze stron to chaos. Partner nie może poświęci�
 
 | Użytkownik | Rola |
 |------------|------|
-| Adrian Domański | Primary user — faza testowa |
-| Maciej Małysz | Docelowy primary user — Partner Inovo |
+| Analyst Domański | Primary user — faza testowa |
+| Partner Name | Docelowy primary user — Partner Fund |
 
 **Zasada:** system jest asystentem decyzyjnym, nie decydentem. Komunikacja outbound do founderów wymaga człowieka.
 
@@ -50,7 +50,7 @@ Inbound pitch decków i leadów ze stron to chaos. Partner nie może poświęci�
 
 ## 4. Success criterion
 
-Partner w **≤ ~2 min** ma z rekordu deala zrozumieć: **kim jest spółka**, **czy mieści się w mandacie Inovo**, **skąd biorą się score’y**, **czego brakuje w materiale**, **jakie są główne ryzyka / mocne strony** oraz **jaki jest sensowny następny krok** — bez konieczności ponownego czytania całego PDF od zera.
+Partner w **≤ ~2 min** ma z rekordu deala zrozumieć: **kim jest spółka**, **czy mieści się w mandacie Fund**, **skąd biorą się score’y**, **czego brakuje w materiale**, **jakie są główne ryzyka / mocne strony** oraz **jaki jest sensowny następny krok** — bez konieczności ponownego czytania całego PDF od zera.
 
 ### Product success metrics (MVP — mierzalne KPI)
 
@@ -71,10 +71,10 @@ North star powyżej zostaje; poniżej **progi operacyjne**, żeby „działa” 
 Dla każdego leada system ma wyprodukować **jeden spójny rekord w `deals`** (oraz opcjonalnie widok w Notion):
 
 1. **Tożsamość i źródło** — `company_name`, `message_id` / URL, `source_url` lub kontekst maila, znaczniki czasu.
-2. **Mandat (Gate 1)** — `gate1_verdict`, `gate1_detected_*`, `gate1_rejection_reason` gdy odrzucone; mapowanie na **Innovo fit** w kodzie.
+2. **Mandat (Gate 1)** — `gate1_verdict`, `gate1_detected_*`, `gate1_rejection_reason` gdy odrzucone; mapowanie na **Fund fit** w kodzie.
 3. **Fakty z materiału** — `gate2_facts_json` (deck) lub odpowiednik po stronie www.
 4. **Scorecard** — `gate2_dimensions_json`, score’y; `gate2_missing_critical_data`, `gate2_should_ask_founder`; `gate2_confidence` / flagi jakości tam gdzie ustawiane.
-5. **Pakiet decyzyjny** — `innovo_fit_decision`, `deck_evidence_decision`, `generic_vc_interest`, oraz pole operacyjne **`final_action`** (reguły w `main.py`).
+5. **Pakiet decyzyjny** — `fund_fit_decision`, `deck_evidence_decision`, `generic_vc_interest`, oraz pole operacyjne **`final_action`** (reguły w `main.py`).
 6. **Opcjonalnie zewnątrz** — `external_opportunity_score` po Gate 2.5.
 7. **HITL** — status w bazie; możliwy szkic Gmail; brak auto-wysyłki.
 8. **Notion** — odzwierciedlenie pól z DB + treść podstrony bez dodatkowego LLM na sync.
@@ -127,18 +127,18 @@ Szczegóły operacyjne layoutu → **`CURSOR_NOTION_INSTRUCTIONS.md`** (zasady d
 ### Journey C — Partner review
 
 1. Partner otwiera **Notion** i/lub wynik w **terminalu**.
-2. Czyta: tożsamość, mandat, score’y, braki (`missing`), mocne strony / ryzyka, **interpretację biznesową** (polami typu Innovo fit / rekomendacja), następny krok.
+2. Czyta: tożsamość, mandat, score’y, braki (`missing`), mocne strony / ryzyka, **interpretację biznesową** (polami typu Fund fit / rekomendacja), następny krok.
 3. Decyzja człowieka: odrzucić, poprosić o więcej info, rozpatrzyć osobiście, eskalować — **poza automatycznym pipeline’em**.
 
 ---
 
-## 8. Inovo mandate reference
+## 8. Fund mandate reference
 
 Ramki **stage / ticket / geo / sector** funduszu — kontekst dla Gate 1 i oceny fitu; **to nie jest journey**, tylko referencja produktowa mandatu.
 
 - **Stage:** Pre-Seed, Seed (rzadko Series A)
 - **Ticket:** €100k–€10m (initial €0.5m–€4m)
-- **Geografie:** CEE + diaspora (PL, LT, HR, RS, UA, LV, EE, RO, BG, SI, CZ, HU, SK, …). **HQ poza CEE (np. SF po YC) nie wyklucza mandatu**, jeśli **founderzy mają korzenie CEE / diaspora** — to jest pełnoprawny fit Inovo. Strona często podaje tylko „US HQ”; produktowo dopuszczalny jest **kontrolowany krok OSINT** (neutralne zapytania + dopasowanie do leksykonu CEE z `config/criteria.py`, bez zakładania konkretnego kraju), z wynikiem w `inferred_signals`, zanim Gate 1 zrobi twardy `FAIL` wyłącznie po treści strony.
+- **Geografie:** CEE + diaspora (PL, LT, HR, RS, UA, LV, EE, RO, BG, SI, CZ, HU, SK, …). **HQ poza CEE (np. SF po YC) nie wyklucza mandatu**, jeśli **founderzy mają korzenie CEE / diaspora** — to jest pełnoprawny fit Fund. Strona często podaje tylko „US HQ”; produktowo dopuszczalny jest **kontrolowany krok OSINT** (neutralne zapytania + dopasowanie do leksykonu CEE z `config/criteria.py`, bez zakładania konkretnego kraju), z wynikiem w `inferred_signals`, zanim Gate 1 zrobi twardy `FAIL` wyłącznie po treści strony.
 - **Sektory:** Developer Tools, AI/ML, Healthcare, SaaS, Marketplaces, B2B/B2C Enterprise
 
 ---
@@ -149,7 +149,7 @@ Rekord prezentowany partnerowi (Notion + pola w DB) powinien pozwolić spełnić
 
 1. **One-liner / kim jest spółka** — produkt lub firma w jednym zdaniu.
 2. **Mandate fit** — geo / stage / sector (z Gate 1 + faktów).
-3. **Interpretacja biznesowa** — Innovo fit, deck evidence, generic VC (lub odpowiedniki www), werdykt / rekomendacja Gate 2 tam gdzie dotyczy.
+3. **Interpretacja biznesowa** — Fund fit, deck evidence, generic VC (lub odpowiedniki www), werdykt / rekomendacja Gate 2 tam gdzie dotyczy.
 4. **Top mocne strony** — lista (np. do 3–5), powiązana ze scorecardem / VC packiem.
 5. **Top ryzyka / concerns** — lista (np. do 3–5).
 6. **Missing critical data** — jawna lista luk.
@@ -166,7 +166,7 @@ Sekcje strony rekordu w Notion → [§ 10. Notion operating view](#10-notion-ope
 **Poziom tabeli (widok dla operatorów)** — w widoku listy/database **dokładnie 5 widocznych kolumn**: `Company` (Title), `Score`, `Status`, `Sector`, `Received At`. Pozostałe pola w schemacie Notion są **hidden** (nadal zapisywane przez sync). Nie dodawać kolejnych widocznych kolumn bez świadomej zmiany procesu — patrz `CURSOR_NOTION_INSTRUCTIONS.md`.
 
 **Poziom strony rekordu (treść deala)** — „subpage” oznacza tu **treść na stronie rekordu w bazie Notion**, a **nie** osobny podstronowy dokument ani osobna strona-dziecko w hierarchii Notion.  
-Format raportu jest **VC-first (investment memo)**: najpierw ocena tezy Inovo, potem opis spółki i szczegóły.
+Format raportu jest **VC-first (investment memo)**: najpierw ocena tezy Fund, potem opis spółki i szczegóły.
 
 **Struktura techniczna (API)** — dokładnie **10 par bloków** = **20 bloków** z rzędu: dla każdej sekcji najpierw **`heading_2`**, potem **`paragraph`** z treścią sekcji. Budowa listy: `_build_deal_summary_blocks`; zapis na stronę: `_ensure_page_summary_blocks` — przy poprawnej kolejności i braku duplikatów **aktualizacja treści przez `PATCH` akapitu** pod danym nagłówkiem; przy złej kolejności lub duplikatach — **odbudowa** przez dopisanie nowych `children` po zarchiwizowaniu starych zarządzanych bloków. Sekcja **🔍 Raw Notes** jest wyjątkiem: domyślny placeholder to `— brak notatek —`; **treści wpisanej przez partnera sync nie nadpisuje** (tylko zachowuje przy przebudowie struktury).
 
@@ -174,10 +174,10 @@ Format raportu jest **VC-first (investment memo)**: najpierw ocena tezy Inovo, p
 
 | # | Nagłówek | Zawartość |
 |---|----------|-----------|
-| 1 | 0. Inovo Decision | Jedna sekcja decyzyjna: `InovoMandateFit.overall`, `InvestmentInterest.overall`, finalny werdykt, następny krok, one-line reason. |
-| 2 | 1. Inovo Fit Check | Deterministyczne osie tezy: geo/CEE link, stage, sector, ticket, software layer; każde z `PASS/UNCERTAIN/FAIL`. |
+| 1 | 0. Fund Decision | Jedna sekcja decyzyjna: `FundMandateFit.overall`, `InvestmentInterest.overall`, finalny werdykt, następny krok, one-line reason. |
+| 2 | 1. Fund Fit Check | Deterministyczne osie tezy: geo/CEE link, stage, sector, ticket, software layer; każde z `PASS/UNCERTAIN/FAIL`. |
 | 3 | 2. Company Snapshot | Fakty operacyjne: nazwa, URL, founderzy, HQ/legal, CEE sygnały, stage, sektor, model. |
-| 4 | 3. Why It Could Be Interesting for Inovo | Pozytywne sygnały inwestycyjne, bez tabel i bez score-first framing. |
+| 4 | 3. Why It Could Be Interesting for Fund | Pozytywne sygnały inwestycyjne, bez tabel i bez score-first framing. |
 | 5 | 4. Risks and Missing Data | Ryzyka + luki decyzyjne w jednym miejscu. |
 | 6 | 5. Open Questions | Konkretne pytania na deck/call. |
 | 7 | 6. Evidence Log | Źródła i ścieżka dowodowa (crawl, ekstrakcja, resolvery, external). |
@@ -214,9 +214,9 @@ Wszystkie sekcje poniżej są **projekcją z SQLite** (kolumny w `storage/databa
 
 | Sekcja | Główne pola / JSON w `deals` | Deck: etapy LLM, które to zasilają | WWW: etapy LLM |
 |--------|------------------------------|--------------------------------------|----------------|
-| **⚡ Decision Snapshot** | `deck_evidence_score` / `gate2_overall_score`, `external_opportunity_score`, `innovo_fit_*`, `final_action`, `gate1_verdict`, `gate2_recommendation`, fragmenty Gate 1 (geo/stage), heurystyki „why blocked” | Gate 1 + Gate 2B/C (score, rekomendacja, rationale) + opcj. Gate 2.5 (tylko **skalar** external w snapshot; pełny JSON Gate 2.5 jest w DB — patrz uwaga niżej) | Www VC + blend + external → te same pola decyzyjne po zapisie |
+| **⚡ Decision Snapshot** | `deck_evidence_score` / `gate2_overall_score`, `external_opportunity_score`, `fund_fit_*`, `final_action`, `gate1_verdict`, `gate2_recommendation`, fragmenty Gate 1 (geo/stage), heurystyki „why blocked” | Gate 1 + Gate 2B/C (score, rekomendacja, rationale) + opcj. Gate 2.5 (tylko **skalar** external w snapshot; pełny JSON Gate 2.5 jest w DB — patrz uwaga niżej) | Www VC + blend + external → te same pola decyzyjne po zapisie |
 | **📋 Deal Summary** | `gate2_facts_json` + meta (`company_one_liner`, nadawca, daty, link Gmail / `source_url`) | **Gate 2A** (fakty), Gate 1 (sector/geo jeśli w wierszu) | Ekstrakcja faktów ze strony |
-| **🎯 Screening Result** | `gate2_summary`, `innovo_fit_decision`, `deck_evidence_decision`, `generic_vc_interest`, `final_action`, `gate2_recommendation`, rationale; skrót wymiarów z `gate2_dimensions_json` | Gate 2C (brief), Gate 2B (wymiary), decyzje policzone w `main.py` | VC pack www + decyzje w `run_assess_url` |
+| **🎯 Screening Result** | `gate2_summary`, `fund_fit_decision`, `deck_evidence_decision`, `generic_vc_interest`, `final_action`, `gate2_recommendation`, rationale; skrót wymiarów z `gate2_dimensions_json` | Gate 2C (brief), Gate 2B (wymiary), decyzje policzone w `main.py` | VC pack www + decyzje w `run_assess_url` |
 | **💪 Strengths** | `gate2_strengths` lub pola w `gate2_dimensions_json` (`top_strengths`, scorecard) | Gate 2B/C | VC pack www |
 | **⚠️ Risks** | `gate2_concerns` / `top_risks` / wymiary niskie | Gate 2B/C | VC pack www |
 | **🏁 Market Context** | Fragmenty narracji z `gate2_dimensions_json` (np. `why_not_higher`, sygnały saturation/timing), opcjonalnie pola pomocnicze z bloba www | Gate 2B/C | VC layer www + heurystyki w kodzie renderu |
@@ -265,11 +265,11 @@ Szczegółowe mapowanie plików → [Appendix A](#appendix-a-canonical-source-of
 
 ## 12. Decision model (single-fund deterministic)
 
-W kodzie decyzja jest liczona deterministycznie z nowego modelu Inovo: `InovoMandateFit` + `InvestmentInterest` + blokery.
+W kodzie decyzja jest liczona deterministycznie z nowego modelu Fund: `FundMandateFit` + `InvestmentInterest` + blokery.
 
 | Pojęcie | Znaczenie | Przykłady |
 |---------|-----------|-----------|
-| **Mandate fit** | Oś tezy Inovo (geo/stage/sector/ticket/software). | `PASS`, `UNCERTAIN`, `FAIL` |
+| **Mandate fit** | Oś tezy Fund (geo/stage/sector/ticket/software). | `PASS`, `UNCERTAIN`, `FAIL` |
 | **Investment interest** | Atrakcyjność inwestycyjna z sygnałów produktu, teamu, rynku, trakcji. | `HIGH`, `MEDIUM_HIGH`, `MEDIUM`, `LOW` |
 | **Final verdict** | Deterministyczny wynik mapowania fit+interest+blockers. | `REVIEW_DECK_OR_TAKE_CALL`, `REQUEST_DECK`, `REQUEST_DECK_AND_VERIFY`, `REJECT_OR_ARCHIVE` |
 | **final_action** | Warstwa operacyjna workflow (kompatybilność pipeline). | `PASS_TO_PARTNER`, `ASK_FOR_MORE_INFO`, `STOP` |
@@ -500,7 +500,7 @@ Ten paragraf to **warstwa analityczna**: *jakie klasy pytań* LLM musi rozstrzyg
 
 | Gate | Wejście (zgrubnie) | Co LLM musi „wyciągnąć” (intencja) |
 |------|--------------------|-------------------------------------|
-| **Gate 1** | Treść maila (+ meta PDF, bez decku) | Mandat Inovo: geo / stage / sector / „czy pitch”, `FAIL_CONFIDENT` tylko przy dowodzie w mailu; przy niepewności + PDF → `UNCERTAIN_READ_DECK` |
+| **Gate 1** | Treść maila (+ meta PDF, bez decku) | Mandat Fund: geo / stage / sector / „czy pitch”, `FAIL_CONFIDENT` tylko przy dowodzie w mailu; przy niepewności + PDF → `UNCERTAIN_READ_DECK` |
 | **Gate 2A** | Markdown decku (+ kontekst maila w polu trusted) | **Tylko fakty** — tożsamość, problem, produkt, klient, rynek, traction z liczbami/cytatami, zespół, fundraising, konkurencja, **missing** — **bez** score’ów VC |
 | **Gate 2B** | JSON faktów | Dla każdego z **11 wymiarów** (`agents/schemas.py`): score, evidence, missing, why_not_higher/lower, confidence — zgodnie z **`SCREENING_SCORECARD.md`** |
 | **Gate 2C** | Fakty + wymiary + overall z **kodu** | Brief partnerski: **bez nowych faktów** — tylko synteza 2A/2B |

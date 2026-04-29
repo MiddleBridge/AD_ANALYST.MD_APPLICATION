@@ -86,7 +86,7 @@ def generate_weekly_report(days: int = 7) -> str:
             n_g2 += 1
 
     report_lines = [
-        f"INOVO.VC — WEEKLY PIPELINE REPORT (last {days} days)",
+        f"EXAMPLE VC FUND — WEEKLY PIPELINE REPORT (last {days} days)",
         "=" * 60,
         "",
         "FUNNEL SUMMARY",

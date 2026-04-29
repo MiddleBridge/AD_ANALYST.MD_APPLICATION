@@ -1,4 +1,4 @@
-# INOVO screening rubric (Gate 2)
+# FUND screening rubric (Gate 2)
 
 Scores must follow this document, **not** intuition alone. For every dimension the model must: identify evidence; list missing data; compare against category benchmarks or competitors where possible; explain why the score is not higher and not lower; apply caps when required; lower `dimension_confidence` when evidence is thin.
 

@@ -26,13 +26,13 @@ WEBSITE_FACTS_USER = """Website markdown (multiple pages concatenated):
 Call submit_website_facts."""
 
 
-WEBSITE_GATE1_SYSTEM = """You are a deal screening assistant for Inovo.VC (CEE-focused early-stage VC).
+WEBSITE_GATE1_SYSTEM = """You are a deal screening assistant for Example VC Fund (CEE-focused early-stage VC).
 
 Classify whether this company is plausibly in scope using ONLY the structured website facts JSON (not the open web).
 
 BOOLEANS (used as hard gates downstream):
-- geography_match: true if ANY of: (a) HQ in CEE, (b) primary market CEE, (c) R&D in CEE, OR (d) **founders / co-founders are CEE diaspora** — Polish/Czech/Slovak/Romanian/Bulgarian/Hungarian/Lithuanian/Latvian/Estonian/Croatian/Slovenian/Ukrainian names or stated origin. **CEE diaspora founders count even when HQ is in US, UK, Switzerland, Germany, etc.** — Inovo explicitly invests in CEE diaspora. A national .pl/.cz/.hu/.ro/.bg/.lt/.lv/.ee/.hr/.si/.sk/.ua ccTLD also counts. **If `inferred_signals` contains `cee_founder_roots_osint` (snippet-backed hint), treat it like diaspora evidence** unless it is clearly contradicted in the JSON. Pure US/Asia/LatAm with NO CEE founder/market/R&D/OSINT angle → false.
-- sector_match: true if the business plausibly fits the fund's thesis. Inovo IN-THESIS sectors: **Developer Tools, AI/ML, AI agents, automation, workflow software, data infrastructure, Healthcare/HealthTech, SaaS marketplaces, B2B SaaS, B2C consumer, FinTech, vertical SaaS, cybersecurity, dev productivity**. Set true generously — only mark false for clear out-of-thesis (gambling, adult, pure consulting/agency/dev shop where service IS the product, hardware-only with no software layer, obvious non-startup). When in doubt → true. Confidence stays MEDIUM unless you have a strong signal.
+- geography_match: true if ANY of: (a) HQ in CEE, (b) primary market CEE, (c) R&D in CEE, OR (d) **founders / co-founders are CEE diaspora** — Polish/Czech/Slovak/Romanian/Bulgarian/Hungarian/Lithuanian/Latvian/Estonian/Croatian/Slovenian/Ukrainian names or stated origin. **CEE diaspora founders count even when HQ is in US, UK, Switzerland, Germany, etc.** — Fund explicitly invests in CEE diaspora. A national .pl/.cz/.hu/.ro/.bg/.lt/.lv/.ee/.hr/.si/.sk/.ua ccTLD also counts. **If `inferred_signals` contains `cee_founder_roots_osint` (snippet-backed hint), treat it like diaspora evidence** unless it is clearly contradicted in the JSON. Pure US/Asia/LatAm with NO CEE founder/market/R&D/OSINT angle → false.
+- sector_match: true if the business plausibly fits the fund's thesis. Fund IN-THESIS sectors: **Developer Tools, AI/ML, AI agents, automation, workflow software, data infrastructure, Healthcare/HealthTech, SaaS marketplaces, B2B SaaS, B2C consumer, FinTech, vertical SaaS, cybersecurity, dev productivity**. Set true generously — only mark false for clear out-of-thesis (gambling, adult, pure consulting/agency/dev shop where service IS the product, hardware-only with no software layer, obvious non-startup). When in doubt → true. Confidence stays MEDIUM unless you have a strong signal.
 
 VERDICT:
 - FAIL_CONFIDENT: Clearly outside mandate (wrong geography with no CEE link, obviously not a startup, agency/dev shop as core business, spam).
@@ -50,15 +50,15 @@ WEBSITE_GATE1_USER = """Website facts JSON:
 Use submit_website_gate1."""
 
 
-WEBSITE_SCORE_SYSTEM = """You score a startup for Inovo.VC (CEE early-stage fund) using ONLY the website facts JSON. Website evidence is weaker than a deck — be calibrated, NOT punitive.
+WEBSITE_SCORE_SYSTEM = """You score a startup for Example VC Fund (CEE early-stage fund) using ONLY the website facts JSON. Website evidence is weaker than a deck — be calibrated, NOT punitive.
 
 ══════════════════════════════════════════════════════════════════════
-INOVO MENTAL MODEL — apply BEFORE every score
+FUND MENTAL MODEL — apply BEFORE every score
 ══════════════════════════════════════════════════════════════════════
 Portfolio anchors: Pathway (8-9), Booksy (9), Spacelift (8), Pythagora (8),
 Splx.ai (8), Infermedica (8), Sintra.ai (7), Gralio (process intel + AI agents).
 
-Hard facts about how Inovo evaluates:
+Hard facts about how Fund evaluates:
   • Polish/CEE diaspora founders are a POSITIVE mandate signal — never a negative.
   • For B2B/enterprise companies the following are CATEGORY NORMS, not red flags:
       - "contact sales" pricing → don't downgrade business_model_clarity below 5.

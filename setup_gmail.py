@@ -21,7 +21,7 @@ console = Console()
 
 def run_setup():
     console.print(Panel.fit(
-        "[bold cyan]Inovo.VC Screening Agent — Gmail Setup[/bold cyan]\n\n"
+        "[bold cyan]Example VC Fund Screening Agent — Gmail Setup[/bold cyan]\n\n"
         "This wizard authenticates your Gmail account.",
         border_style="cyan",
     ))
@@ -64,10 +64,10 @@ def run_setup():
                 f"ANTHROPIC_API_KEY=\n"
                 f"GMAIL_CREDENTIALS_PATH=credentials.json\n"
                 f"GMAIL_TOKEN_PATH=token.json\n"
-                f"GMAIL_PROCESSED_LABEL=Inovo/Screened\n"
+                f"GMAIL_PROCESSED_LABEL=Fund/Screened\n"
                 f"GMAIL_USER_EMAIL={user_email}\n"
                 f"REVIEWER_EMAIL={user_email}\n"
-                f"REVIEWER_NAME=Adrian\n"
+                f"REVIEWER_NAME=Analyst\n"
                 f"CALENDLY_LINK=\n"
                 f"POLLING_INTERVAL_MINUTES=15\n"
                 f"GATE2_PASS_THRESHOLD=6.0\n"

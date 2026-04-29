@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from agents.inovo_domain import InovoGeoAssessment, InovoMandateFit, InvestmentInterest
+from agents.fund_domain import FundGeoAssessment, FundMandateFit, InvestmentInterest
 
 
 @dataclass
@@ -11,7 +11,7 @@ class Blockers:
     reasons: list[str] = field(default_factory=list)
 
 
-def apply_inovo_geo_rule(geo_assessment: InovoGeoAssessment) -> str:
+def apply_fund_geo_rule(geo_assessment: FundGeoAssessment) -> str:
     if geo_assessment.status == "confirmed_cee":
         return "PASS"
     if geo_assessment.status in ("possible_cee_founder", "possible_cee_diaspora", "possible_cee_operations", "possible_cee"):
@@ -82,7 +82,7 @@ def investment_interest_from_scores(
     )
 
 
-def inovo_verdict(
+def fund_verdict(
     mandate_fit: str,
     investment_interest: str,
     confidence: float,
@@ -114,14 +114,14 @@ def map_verdict_to_action(verdict: str) -> str:
     }.get(verdict, "ASK_FOR_MORE_INFO")
 
 
-def build_inovo_mandate_fit(
+def build_fund_mandate_fit(
     *,
     geo_decision: str,
     stage_decision: str,
     sector_decision: str,
     ticket_decision: str = "UNKNOWN",
     software_decision: str = "PASS",
-) -> InovoMandateFit:
+) -> FundMandateFit:
     vals = [geo_decision, stage_decision, sector_decision, ticket_decision, software_decision]
     if "FAIL" in vals:
         overall = "FAIL"
@@ -129,7 +129,7 @@ def build_inovo_mandate_fit(
         overall = "UNCERTAIN"
     else:
         overall = "PASS"
-    return InovoMandateFit(
+    return FundMandateFit(
         geography=geo_decision,
         stage=stage_decision,
         sector=sector_decision,

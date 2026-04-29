@@ -43,7 +43,7 @@ _LEADER_ROLE_PATTERN = (
     r"President|Managing\s+Director|Founding\s+Engineer)"
 )
 
-# Reasonable Latin-script personal name (2-3 capitalised words). Allows
+# Reasonable Latin-script person name (2-3 capitalised words). Allows
 # Polish/European diacritics in lowercase letters. We require at least 2 chars
 # *after* the leading capital (so "Co", "Mr", "Sr" – frequent role prefixes –
 # do not get sucked into the captured name) and limit to 3 words to avoid
@@ -51,7 +51,7 @@ _LEADER_ROLE_PATTERN = (
 _NAME_WORD = r"[A-Z][a-zA-Z\u00C0-\u017F\u0370-\u03FF'\-]{2,}"
 _NAME_PATTERN = rf"{_NAME_WORD}(?:\s+{_NAME_WORD}){{1,2}}"
 
-# Tokens that look like a personal name but are actually role prefixes,
+# Tokens that look like a person name but are actually role prefixes,
 # initials, salutations, or company-tail words ("Inc", "Corp", "Labs").
 _BAD_NAME_TOKENS = {
     "co", "sr", "jr", "mr", "mrs", "ms", "dr", "mx", "vp", "ceo", "cto", "coo",
@@ -207,7 +207,7 @@ def _extract_founders(markdown: str) -> tuple[str, List[str]]:
         # (e.g. "Tymon Terlikiewicz Co" — leftover "Co" from "Co-Founder").
         if any(tok.lower() in _BAD_NAME_TOKENS for tok in tokens):
             return
-        # Personal names usually have at most 3 components on a website card.
+        # Person names usually have at most 3 components on a website card.
         if not (2 <= len(tokens) <= 3):
             return
         if n.lower() in seen_names:

@@ -9,7 +9,7 @@ from config.prompts import (
 from storage.models import EmailData, Gate2Result, HITLDecision
 from tools.gmail_client import GmailClient
 
-REVIEWER_NAME = os.getenv("REVIEWER_NAME", "Adrian")
+REVIEWER_NAME = os.getenv("REVIEWER_NAME", "Analyst")
 CALENDLY_LINK = os.getenv("CALENDLY_LINK", "")
 
 

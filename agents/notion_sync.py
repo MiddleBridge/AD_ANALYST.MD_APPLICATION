@@ -93,10 +93,10 @@ def _linkedin_search_url(name: str, company: str = "") -> str:
 
 def _parse_cee_osint(inferred_blob: str) -> list[tuple[str, str]]:
     """Return (country_token, source_url) pairs from inferred_signals.
-    Skips inovo.vc - that domain is only valid for Inovo's own portfolio.
+    Skips example.vc - that domain is only valid for Fund's own portfolio.
     If the same token appears multiple times, keeps the entry with the best URL.
     """
-    _SKIP = ("inovo.vc", "inovo.pl")
+    _SKIP = ("example.vc", "example.vc")
     # token -> best url found so far (empty string = no valid url yet)
     best: dict[str, str] = {}
     order: list[str] = []
@@ -278,7 +278,7 @@ def _annotate_lines_with_source(text: str, default_source: str) -> str:
             src = "tavily"
         elif "fact_on_site" in l or "on-site" in l or "website:" in l:
             src = "website_crawl"
-        elif "final action" in l or "innovo fit" in l or "gate 1" in l or "score" in l:
+        elif "final action" in l or "fund fit" in l or "gate 1" in l or "score" in l:
             src = "database+rules"
         elif "executive summary" in l or "rationale" in l or "why not higher" in l:
             src = "llm"
@@ -411,7 +411,7 @@ def _build_deal_summary_blocks(row: dict[str, Any]) -> list[dict[str, Any]]:
     source_url = str(row.get("source_url") or "").strip()
     link_label = "Website" if source_url else "Gmail"
     primary_link = source_url or _gmail_message_url(str(row.get("message_id") or ""))
-    innovo_fit = str(row.get("innovo_fit_decision") or "")
+    fund_fit = str(row.get("fund_fit_decision") or "")
     deck_ev = str(row.get("deck_evidence_decision") or "")
     generic = str(row.get("generic_vc_interest") or "")
     final_action = str(row.get("final_action") or "")
@@ -424,7 +424,7 @@ def _build_deal_summary_blocks(row: dict[str, Any]) -> list[dict[str, Any]]:
         or ""
     ).strip()
     verdict = str(row.get("gate2_recommendation") or row.get("final_action") or "").strip()
-    innovo_score = row.get("innovo_fit_score")
+    fund_score = row.get("fund_fit_score")
     deck_score = row.get("deck_evidence_score")
     gate1_verdict = str(row.get("gate1_verdict") or "").strip()
     external_score = row.get("external_opportunity_score")
@@ -685,8 +685,8 @@ def _build_deal_summary_blocks(row: dict[str, Any]) -> list[dict[str, Any]]:
             why_blocked = (
                 str(row.get("gate1_rejection_reason") or "").strip()
                 or (kill_flags[0] if kill_flags else "")
-                or (f"Innovo Fit: {innovo_fit}" if innovo_fit and innovo_fit != "PASS" else "")
-                or (f"Gate 1: UNCERTAIN — geography/stage not confirmed" if "UNCERTAIN" in str(innovo_fit or "") else "")
+                or (f"Fund Fit: {fund_fit}" if fund_fit and fund_fit != "PASS" else "")
+                or (f"Gate 1: UNCERTAIN — geography/stage not confirmed" if "UNCERTAIN" in str(fund_fit or "") else "")
                 or "—"
             )
     if not why_blocked:
@@ -698,11 +698,11 @@ def _build_deal_summary_blocks(row: dict[str, Any]) -> list[dict[str, Any]]:
         f"{internal_score_label}: {score_str}",
         f"Gate 2 overall (pipeline): {'%.2f' % float(row.get('gate2_overall_score')) if row.get('gate2_overall_score') is not None else 'n/a'}",
         f"External opportunity score: {'%.2f' % float(external_score) if external_score is not None else 'n/a'}",
-        f"Innovo Fit score: {'%.2f' % float(innovo_score) if innovo_score is not None else 'n/a'}",
+        f"Fund Fit score: {'%.2f' % float(fund_score) if fund_score is not None else 'n/a'}",
         "",
         "2) Mandate / routing",
         f"Final Action: {final_action or na}",
-        f"Innovo Fit decision: {innovo_fit or na}",
+        f"Fund Fit decision: {fund_fit or na}",
         f"Gate 1 verdict: {gate1_verdict or na}",
         f"Verdict / recommendation: {verdict or na}",
     ]
@@ -918,7 +918,7 @@ def _build_deal_summary_blocks(row: dict[str, Any]) -> list[dict[str, Any]]:
         [
             f"Verdict: {verdict or na}",
             f"{internal_label2} decision: {deck_ev or na} (score: {na if deck_score is None else deck_score})",
-            f"Innovo Fit: {innovo_fit or na} (score: {na if innovo_score is None else innovo_score})",
+            f"Fund Fit: {fund_fit or na} (score: {na if fund_score is None else fund_score})",
             f"Generic VC Interest: {generic or na}",
             f"Final Action: {final_action or na}",
         ]
@@ -1137,7 +1137,7 @@ def _build_deal_summary_blocks(row: dict[str, Any]) -> list[dict[str, Any]]:
 
     company_name_str = str(row.get("company_name") or "")
 
-    overall_fit_raw = str(innovo_fit or "").upper()
+    overall_fit_raw = str(fund_fit or "").upper()
     overall_fit_label = (
         "FAIL" if overall_fit_raw == "FAIL"
         else "PASS" if overall_fit_raw == "PASS"
@@ -1493,7 +1493,7 @@ def _ensure_page_summary_blocks(
                 break
 
         sigs = (
-            "One-liner:", "Innovo Fit:", "Missing:", "Score:", "Saturation:", "Founder call",
+            "One-liner:", "Fund Fit:", "Missing:", "Score:", "Saturation:", "Founder call",
             "product_clarity", "target_customer", "problem_clarity",
             "founder_or_team", "distribution_signal", "urgency_and",
             "• ",
@@ -1698,7 +1698,7 @@ def _notion_props_for_row(
     # New staged fields
     is_website = bool(str(row.get("source_url") or "").strip())
     for pname, value in (
-        ("Innovo Fit Decision", str(row.get("innovo_fit_decision") or "")),
+        ("Fund Fit Decision", str(row.get("fund_fit_decision") or "")),
         ("Deck Evidence Decision", str(row.get("deck_evidence_decision") or "")),
         ("Generic VC Interest", str(row.get("generic_vc_interest") or "")),
         ("Final Action", str(row.get("final_action") or "")),
@@ -1716,7 +1716,7 @@ def _notion_props_for_row(
     for pname, value in (
         ("Deck Evidence Score", row.get("deck_evidence_score")),
         ("External Opportunity Score", row.get("external_opportunity_score")),
-        ("Innovo Fit Score", row.get("innovo_fit_score")),
+        ("Fund Fit Score", row.get("fund_fit_score")),
     ):
         if pname in db_props:
             t = _prop_type(db_props, pname)
@@ -1958,7 +1958,7 @@ def _ensure_notion_schema(
             "Updated At": {"rich_text": {}},
             "Created At": {"rich_text": {}},
             "Rejection Reason": {"rich_text": {}},
-            "Innovo Fit Decision": {"rich_text": {}},
+            "Fund Fit Decision": {"rich_text": {}},
             "Deck Evidence Decision": {"rich_text": {}},
             "Generic VC Interest": {"rich_text": {}},
             "Final Action": {"rich_text": {}},
@@ -1966,7 +1966,7 @@ def _ensure_notion_schema(
             "Auth Risk": {"rich_text": {}},
             "Deck Evidence Score": {"number": {}},
             "External Opportunity Score": {"number": {}},
-            "Innovo Fit Score": {"number": {}},
+            "Fund Fit Score": {"number": {}},
             "Debug Override Used": {"checkbox": {}},
             "Test Case": {"checkbox": {}},
         }

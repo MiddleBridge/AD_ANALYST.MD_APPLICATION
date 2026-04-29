@@ -223,7 +223,7 @@ def _next_step_vc(v: WebsiteFinalVerdict) -> str:
         "NEEDS_DECK": "Request pitch deck and light data room; validate VC-scale economics.",
         "NEEDS_FOUNDER_CALL": "Founder call + deck; validate ICP, CAC, retention, and right-to-win.",
         "PASS_TO_HITL": "Route to partner HITL with VC diligence summary.",
-        "STRONG_SIGNAL": "Fast-track partner review; confirm private metrics and moat on call.",
+        "STRONG_SIGNAL": "Fast-track partner review; confirm non-public metrics and moat on call.",
         "GOOD_COMPANY_NOT_OBVIOUS_VC": "Good operator clarity; not yet fund-return shaped — nurture or pass politely.",
     }.get(v, "Review manually.")
 

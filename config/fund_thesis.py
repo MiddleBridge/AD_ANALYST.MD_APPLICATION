@@ -1,6 +1,6 @@
-"""Inovo-specific investment thesis constants (single-fund engine)."""
+"""Fund-specific investment thesis constants (single-fund engine)."""
 
-INOVO_GEO_CORE = [
+FUND_GEO_CORE = [
     "Poland",
     "Lithuania",
     "Latvia",
@@ -21,7 +21,7 @@ INOVO_GEO_CORE = [
     "Montenegro",
 ]
 
-INOVO_GEO_ACCEPTED_SIGNALS = [
+FUND_GEO_ACCEPTED_SIGNALS = [
     "hq_in_cee",
     "founder_from_cee",
     "founder_educated_in_cee",
@@ -32,19 +32,19 @@ INOVO_GEO_ACCEPTED_SIGNALS = [
     "cee_diaspora_founder",
 ]
 
-INOVO_STAGE_CORE = [
+FUND_STAGE_CORE = [
     "pre-seed",
     "seed",
     "seed-extension",
 ]
 
-INOVO_STAGE_ACCEPTABLE_BUT_NEEDS_CHECK = [
+FUND_STAGE_ACCEPTABLE_BUT_NEEDS_CHECK = [
     "late-seed",
     "series-a-ready",
     "series-a",
 ]
 
-INOVO_SECTORS_STRONG = [
+FUND_SECTORS_STRONG = [
     "developer tools",
     "software infrastructure",
     "ai/ml",
@@ -58,7 +58,7 @@ INOVO_SECTORS_STRONG = [
     "marketplace with software layer",
 ]
 
-INOVO_SECTORS_WEAK_OR_RISKY = [
+FUND_SECTORS_WEAK_OR_RISKY = [
     "crypto",
     "consumer social",
     "education",
@@ -68,10 +68,10 @@ INOVO_SECTORS_WEAK_OR_RISKY = [
     "agency",
 ]
 
-INOVO_TICKET_MIN_EUR = 500_000
-INOVO_TICKET_MAX_EUR = 4_000_000
+FUND_TICKET_MIN_EUR = 500_000
+FUND_TICKET_MAX_EUR = 4_000_000
 
-INOVO_HARD_BLOCKERS = [
+FUND_HARD_BLOCKERS = [
     "no_software_component",
     "too_late_stage",
     "no_cee_link_confirmed_after_enrichment",

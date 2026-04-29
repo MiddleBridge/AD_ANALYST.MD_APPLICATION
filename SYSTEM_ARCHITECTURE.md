@@ -1,4 +1,4 @@
-# ARCHITECTURE — Inovo.VC AI Screening Agent
+# ARCHITECTURE — VC Fund AI Screening Agent
 
 > Jedno miejsce z pełnym opisem systemu — jak działa, dlaczego tak, co gdzie leży.
 
@@ -32,7 +32,7 @@ Zostawić człowiekowi tylko decyzje, których AI nie powinna podejmować samodz
 ## Architektura — przegląd
 
 ```
-Gmail (dokuzu12@gmail.com only)
+Gmail (configured sender only)
         │
         ▼
 ┌──────────────────────────────────────────────────┐
@@ -197,7 +197,7 @@ Każdy wymiar ma: **score** (1-10) + **reasoning** (cytat/dowód z decku).
 ## Struktura plików
 
 ```
-INOVO_AI/
+VC_FUND_SCREENING_AGENT/
 │
 ├── main.py                      # Entry point — CLI, polling loop
 ├── SYSTEM_ARCHITECTURE.md       # Ten dokument
@@ -218,7 +218,7 @@ INOVO_AI/
 │
 ├── config/
 │   ├── prompts.py               # Wszystkie system+user prompty
-│   ├── criteria.py              # Kryteria inwestycyjne Inovo
+│   ├── criteria.py              # Kryteria inwestycyjne funduszu
 │   ├── scoring.py               # Wzory scoring + wagi wymiarów
 │   └── llm_cost.py              # Nazwy modeli, limity tokenów
 │
@@ -247,14 +247,14 @@ INOVO_AI/
 
 ```bash
 # 1. Setup (raz)
-cd /Users/adrian/INOVO_AI
+cd /path/to/project
 source venv/bin/activate
 pip install -r requirements.txt
 python setup_gmail.py           # OAuth z Google
 
 # 2. Uzupełnij .env
 OPENAI_API_KEY=sk-proj-...
-ALLOWED_SENDER=dokuzu12@gmail.com
+ALLOWED_SENDER=your_email@example.com
 
 # 3. Test na lokalnym PDF
 python main.py --test path/to/deck.pdf
@@ -288,7 +288,7 @@ python main.py assess-url https://example.com
 | `GMAIL_CREDENTIALS_PATH` | `credentials.json` | OAuth credentials |
 | `GMAIL_TOKEN_PATH` | `token.json` | OAuth token (auto) |
 | `GMAIL_USER_EMAIL` | — | Twój email |
-| `ALLOWED_SENDER` | `dokuzu12@gmail.com` | Jedyny skanowany sender |
+| `ALLOWED_SENDER` | `your_email@example.com` | Jedyny skanowany sender |
 | `REVIEWER_NAME` | `Adrian` | Imię w emailach |
 | `CALENDLY_LINK` | — | Link do bookingu |
 | `POLLING_INTERVAL_MINUTES` | `15` | Jak często sprawdza Gmail |
@@ -327,7 +327,7 @@ python main.py assess-url https://example.com
 
 ## Kalibracja scoringu — benchmarki z portfolio
 
-System kalibrowany na znanych spółkach Inovo:
+System kalibrowany na znanych spółkach benchmarkowych:
 
 | Spółka | Oczekiwany score | Kluczowe sygnały |
 |--------|-----------------|-----------------|

@@ -1,22 +1,22 @@
-from agents.inovo_decision import (
+from agents.fund_decision import (
     Blockers,
-    InovoGeoAssessment,
-    apply_inovo_geo_rule,
-    build_inovo_mandate_fit,
+    FundGeoAssessment,
+    apply_fund_geo_rule,
+    build_fund_mandate_fit,
     classify_stage,
-    inovo_verdict,
+    fund_verdict,
 )
 
 
 def test_no_cee_signal_cannot_be_pass():
-    geo = InovoGeoAssessment(
+    geo = FundGeoAssessment(
         status="no_cee_signal",
         strongest_signal=None,
         confidence=0.2,
         decision="UNCERTAIN",
     )
-    geo_decision = apply_inovo_geo_rule(geo)
-    mandate = build_inovo_mandate_fit(
+    geo_decision = apply_fund_geo_rule(geo)
+    mandate = build_fund_mandate_fit(
         geo_decision=geo_decision,
         stage_decision="PASS",
         sector_decision="PASS",
@@ -28,13 +28,13 @@ def test_no_cee_signal_cannot_be_pass():
 
 
 def test_hq_outside_cee_with_diaspora_signal_is_not_auto_fail():
-    geo = InovoGeoAssessment(
+    geo = FundGeoAssessment(
         status="possible_cee_diaspora",
         strongest_signal="founder_origin: Poland",
         confidence=0.7,
         decision="UNCERTAIN",
     )
-    assert apply_inovo_geo_rule(geo) in ("PASS", "UNCERTAIN")
+    assert apply_fund_geo_rule(geo) in ("PASS", "UNCERTAIN")
 
 
 def test_stage_classification_series_b_plus_fails_stage():
@@ -43,7 +43,7 @@ def test_stage_classification_series_b_plus_fails_stage():
 
 
 def test_verdict_mapping_uncertain_becomes_request_deck_and_verify():
-    verdict = inovo_verdict(
+    verdict = fund_verdict(
         mandate_fit="UNCERTAIN",
         investment_interest="MEDIUM_HIGH",
         confidence=0.6,

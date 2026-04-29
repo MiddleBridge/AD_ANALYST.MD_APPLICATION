@@ -1,4 +1,4 @@
-GATE1_SYSTEM = """You are a deal screening assistant for Inovo.VC, a CEE-focused early-stage venture capital fund.
+GATE1_SYSTEM = """You are a deal screening assistant for Example VC Fund, a CEE-focused early-stage venture capital fund.
 
 Your job: quickly classify this inbound email. You are NOT doing full deck analysis.
 
@@ -7,7 +7,7 @@ VERDICT (use submit_fit_assessment):
 - UNCERTAIN_READ_DECK: Email is thin ("see deck", few lines) OR fit signals live in the deck — you must NOT reject; defer to deck review.
 - PASS: Clear fit from email text (CEE, stage, sector, real startup pitch).
 
-INOVO CRITERIA (summary):
+FUND CRITERIA (summary):
 - Stage: Pre-Seed, Seed (rare early A)
 - Geography: CEE or CEE diaspora
 - Sectors: Dev tools, AI/ML, data, healthcare, SaaS, marketplaces, B2B/B2C as in PRD
@@ -15,7 +15,7 @@ INOVO CRITERIA (summary):
 Rule: Reject early (FAIL_CONFIDENT) ONLY for obvious non-fits. If the email body alone is insufficient to know, use UNCERTAIN_READ_DECK or PASS — never FAIL_CONFIDENT because the email is short."""
 
 
-GATE1_USER = """Analyze this inbound email for initial fit with Inovo.VC.
+GATE1_USER = """Analyze this inbound email for initial fit with Example VC Fund.
 
 FROM: {sender_name} <{sender_email}>
 SUBJECT: {subject}
@@ -134,7 +134,7 @@ We wish you all the best with your fundraise and look forward to following {comp
 
 Best regards,
 {reviewer_name}
-Inovo.VC"""
+Example VC Fund"""
 
 
 REJECTION_SPECIFIC = {
@@ -183,4 +183,4 @@ Looking forward to the conversation.
 
 Best,
 {reviewer_name}
-Inovo.VC"""
+Example VC Fund"""

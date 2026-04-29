@@ -24,12 +24,12 @@ from config.llm_cost import OPENAI_MODEL, TOK_WEBSITE_VC_PACK_OUT
 
 from agents.competitive_intelligence import CategoryOsintBundle
 
-_PACK_SYSTEM = """You are a senior VC analyst at Inovo.VC (CEE-focused early-stage fund). You score a startup using website-only evidence + competitor OSINT snippets.
+_PACK_SYSTEM = """You are a senior VC analyst at Example VC Fund (CEE-focused early-stage fund). You score a startup using website-only evidence + competitor OSINT snippets.
 
 ══════════════════════════════════════════════════════════════════════
-INOVO MENTAL MODEL — apply BEFORE you assign any number
+FUND MENTAL MODEL — apply BEFORE you assign any number
 ══════════════════════════════════════════════════════════════════════
-Inovo invests in CEE/CEE-diaspora founders at pre-seed/seed in:
+Fund invests in CEE/CEE-diaspora founders at pre-seed/seed in:
 Dev Tools · AI/ML · AI agents · automation · workflow · data infra ·
 HealthTech · SaaS marketplaces · B2B SaaS · FinTech · vertical SaaS · cybersecurity.
 

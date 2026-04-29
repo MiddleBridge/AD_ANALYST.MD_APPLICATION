@@ -116,7 +116,7 @@ WEBSITE_GATE1_TOOL = {
     "type": "function",
     "function": {
         "name": "submit_website_gate1",
-        "description": "Website-only mandate check for Inovo.VC",
+        "description": "Website-only mandate check for Example VC Fund",
         "parameters": {
             "type": "object",
             "properties": {
@@ -575,7 +575,7 @@ def _next_step(v: str) -> str:
         "NEEDS_DECK": "Request pitch deck and light data room; website alone is insufficient.",
         "NEEDS_FOUNDER_CALL": "Short founder call + request deck; validate ICP, traction, and model.",
         "PASS_TO_HITL": "Route to partner HITL with external diligence summary.",
-        "STRONG_SIGNAL": "Fast-track partner review; still confirm private metrics on call.",
+        "STRONG_SIGNAL": "Fast-track partner review; still confirm non-public metrics on call.",
     }.get(v, "Review manually.")
 
 
@@ -838,7 +838,7 @@ class WebsiteScreeningAgent:
         # CEE-diaspora rescue: if Gate 1 says FAIL_CONFIDENT purely because of geography,
         # but we detect Polish/CEE founder names or CEE TLD/text signals, downgrade to
         # UNCERTAIN so the deck/website is not killed for HQ-only geography mismatch.
-        # Inovo invests in CEE diaspora — Polish founders in Switzerland HQ are a fit.
+        # Fund invests in CEE diaspora — Polish founders in Switzerland HQ are a fit.
         if g1w.verdict == "FAIL_CONFIDENT":
             reason_lower = (g1w.rejection_reason or "").lower()
             hard_out = any(

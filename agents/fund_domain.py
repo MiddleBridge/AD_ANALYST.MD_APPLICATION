@@ -25,7 +25,7 @@ class CEESignal:
 
 
 @dataclass
-class InovoGeoAssessment:
+class FundGeoAssessment:
     status: str  # confirmed_cee | possible_cee | no_cee_signal | unknown
     strongest_signal: str | None
     all_signals: list[CEESignal] = field(default_factory=list)
@@ -34,7 +34,7 @@ class InovoGeoAssessment:
 
 
 @dataclass
-class InovoMandateFit:
+class FundMandateFit:
     geography: str
     stage: str
     sector: str
@@ -59,7 +59,7 @@ class InvestmentInterest:
 class SectorAssessment:
     primary_sector: str
     secondary_sectors: list[str] = field(default_factory=list)
-    inovo_sector_fit: str = "UNCERTAIN"  # PASS | UNCERTAIN | FAIL
+    fund_sector_fit: str = "UNCERTAIN"  # PASS | UNCERTAIN | FAIL
     why_fit: list[str] = field(default_factory=list)
     risks: list[str] = field(default_factory=list)
 

@@ -1,5 +1,5 @@
 ================================================================================
-INOVO.VC — TOP HIGH-VALUE USE CASES (wersja aplikacyjna)
+EXAMPLE VC FUND — TOP HIGH-VALUE USE CASES (wersja aplikacyjna)
 Opis pod role: Analyst (Sourcing & Ops)
 Wygenerowano: 2026-04-28
 ================================================================================
