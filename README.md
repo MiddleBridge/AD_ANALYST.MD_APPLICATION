@@ -57,16 +57,72 @@ It is designed as an application artifact: clear outputs, explicit limits, and s
 - Missing data is always shown explicitly.
 - Scores are decision support, not final truth.
 
-## How to run
+## Local setup (run on your machine)
+
+### 1) Requirements
+
+- Python 3.9+
+- `pip`
+- Gmail OAuth credentials (optional, only for inbox/deck flow)
+- OpenAI API key (required for screening)
+- Notion API key + database (optional, for sync)
+
+### 2) Install
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
-# add keys
-python main.py --once
 ```
+
+### 3) Configure `.env` (minimum)
+
+Required:
+- `OPENAI_API_KEY`
+
+If you want Gmail intake:
+- `GMAIL_CREDENTIALS_PATH`
+- `GMAIL_TOKEN_PATH`
+- `GMAIL_USER_EMAIL`
+- `ALLOWED_SENDER`
+
+If you want Notion sync:
+- `NOTION_API_KEY`
+- `NOTION_DATABASE_ID`
+
+### 4) First-time Gmail auth (optional)
+
+```bash
+python setup_gmail.py
+```
+
+### 5) Run common flows
+
+```bash
+# Process inbox once
+python main.py --once
+
+# Website-only screen
+python main.py assess-url https://example.com
+
+# Weekly pipeline report (no new LLM calls)
+python main.py --report --days 7
+
+# Sync recent records to Notion
+python main.py --sync-notion --days 30
+
+# Add a founder call note to a company page in Notion
+python main.py sync-call --company "ExampleCo" --call-id "ff_demo_001" --source fireflies --title "Founder intro" --url "https://app.fireflies.ai/view/..." --date "2026-04-29" --attendees "Partner, Founder" --summary "Discussion summary" --tasks "Request metrics;Schedule follow-up"
+```
+
+## Integrations and tech stack
+
+- OpenAI API: classification, extraction, scoring, summaries
+- Gmail API (OAuth): inbound email/deck intake + draft handling
+- Notion API: pipeline memory, deal pages, call notes, task sync
+- SQLite: local pipeline state and reporting data
+- Python CLI: orchestration in `main.py`
 
 ## Known limitations
 
