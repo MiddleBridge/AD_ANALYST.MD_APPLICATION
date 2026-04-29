@@ -3,6 +3,7 @@
 ## What this is
 
 This project is an AI-native workflow artifact for a VC fund Analyst / Sourcing & Ops scope.
+It is an end-to-end operating system that handles the full chain: from the moment an inbound message appears in the inbox, through analysis (email/deck/website), to downstream pipeline ownership (briefs, next-step recommendations, meeting notes, and follow-ups).
 It screens inbound founder emails, decks, and company websites.
 It converts noisy inputs into decision-useful company briefs.
 It supports pipeline hygiene, reporting, and next-step tracking.
